@@ -1,0 +1,94 @@
+body,
+html {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.iconButton {
+  width: 40px;
+  height: 60px;
+  background-color: #f6f7f9;
+}
+
+.barra-esquerda {
+  background-color: #fff;
+  min-width: 70px;
+  max-width: 100px;
+}
+
+.segunda-barra {
+  background-color: #f6f7f9;
+}
+
+.pop-chat {
+  background-color: #1c98da;
+  border-radius: 10px;
+}
+
+.img-chat {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.data-hora {
+  font-size: 13px;
+}
+
+.mensagem {
+  font-size: 13px;
+}
+
+.mensagem-chat {
+  /* background-color: #fff; */
+  border-radius: 10px;
+}
+
+.fundo-text {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: justify;
+}
+
+.botoes {
+  visibility: hidden;
+}
+
+.enviar {
+  visibility: hidden;
+}
+
+.back-chat {
+  background-image: url("../../dist/img/imgChat/depositphotos_148660113-stock-illustration-technology-social-media-network-link.jpg");
+  background-position: center;
+  /* Center the image */
+  background-repeat: no-repeat;
+  /* Do not repeat the image */
+  background-size: cover;
+  background-attachment: fixed;
+
+  /* Resize the background image to cover the entire container */
+}
+
+.horario-mensagem {
+  margin: -50px 0 0 0;
+}
+
+.fechar {
+  visibility: hidden;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.card-link:hover {
+  color: turquoise;
+}
+
+.card-link a:link,
+a:visited {
+  color: white;
+}
