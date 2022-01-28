@@ -6,12 +6,16 @@ const consign = require("consign");
 const conexoesBD = require("./infraestrutura/conexoesBD");
 const session = require("express-session");
 var MySQLStore = require("express-mysql-session")(session);
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocs = require("./swagger.json");
 
 require("dotenv").config(); //carregar configurações do dotenv
 
 conexoesBD.conectarTodosBd();
 
 const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 var options = {
   host: process.env.DB_HOST,

@@ -54,4 +54,8 @@ module.exports = (app) => {
       res.send("Já existe um usuário cadastrado");
     }
   });
+
+  app.get("/terms", isAuth, async (req, res) => {
+    res.render("terms");
+  });
 };
