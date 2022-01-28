@@ -37,5 +37,5 @@ app.set("view engine", "ejs");
 consign().include("controllers").into(app);
 
 app.listen(process.env.SERVER_PORT, () => {
-  console.log("conectou");
+  console.log("Servidor Online");
 });

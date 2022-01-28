@@ -36,4 +36,22 @@ module.exports = (app) => {
       res.redirect("/");
     });
   });
+
+  app.get("/primeiro-usuario", async (req, res) => {
+    let usuarioCadastrado = [];
+    usuarioCadastrado = await Usuario.verificarExisteUsuario();
+
+    let login = {
+      login: req.query.login,
+      email: req.query.email,
+      senha: req.query.senha,
+    };
+
+    if (!usuarioCadastrado.length) {
+      await Usuario.cadastrarUsuario(login);
+      res.send("Usuário cadastrado com sucesso");
+    } else {
+      res.send("Já existe um usuário cadastrado");
+    }
+  });
 };
