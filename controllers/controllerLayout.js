@@ -1,5 +1,7 @@
 const Consumo = require("../models/consumoInternetClienteMysql");
 const Usuario = require("../models/usuarios");
+const isAuth = require("../middlewares/auth");
+require("dotenv").config(); //carregar configurações do dotenv
 
 module.exports = (app) => {
   app.get("/", async (req, res) => {
@@ -16,24 +18,7 @@ module.exports = (app) => {
       if (!usuarioLogado.length) {
         res.redirect("/?erro=" + "nao foi possivel altenticar");
       } else {
-        //funcoes.inserirUsuarioLogado(login);
-
-        /*
-        let usuarioLogado = await Logados.pesquisarLogadoNome(login[0].nome);
-
-        if (!usuarioLogado.length) {
-          
-          Logados.inserirUsuarioLogado({
-            atendente: usuarioLogando.nome,
-            status: "logado",
-            id_atendente: usuarioLogando.id,
-          });
-          
-        } else {
-          // Logados.mudarStatus({ status: "logado" }, usuarioLogado[0].atendente);
-        }
-        */
-
+        req.session.isAuth = true;
         res.redirect("/home");
       }
     } else {
@@ -41,11 +26,14 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/home", async (req, res) => {
+  app.get("/home", isAuth, async (req, res) => {
     res.render("index");
   });
 
   app.get("/logout", async (req, res) => {
-    res.redirect("/");
+    req.session.destroy((err) => {
+      if (err) throw err;
+      res.redirect("/");
+    });
   });
 };

@@ -1,9 +1,10 @@
 const consumoCliente = require("../models/consultaSgpPostgresql");
 const Consumo = require("../models/consumoInternetClienteMysql");
 const moment = require("moment"); // require
+const isAuth = require("../middlewares/auth");
 
 module.exports = (app) => {
-  app.get("/consumo-internet", async (req, res) => {
+  app.get("/consumo-internet", isAuth, async (req, res) => {
     let consumo = await consumoCliente.buscarConsumoCliente(
       moment().format("YYYY-MM") + "-01" //primeiro dia do mês
     );
