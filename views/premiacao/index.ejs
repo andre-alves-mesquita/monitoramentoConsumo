@@ -1,0 +1,189 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+  
+    </div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-dark">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-file"></i></span>   Formulário de Instalações</strong></h4>
+                        </div>
+                        <div class="card-body">
+                     
+                            <div class="row">
+                                <div class="col-12">
+                                   
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+
+<div class="row">
+    <div class="col-6">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Técnico</span>
+            <input type="text" class="form-control" placeholder="Técnico Responsável pela instalação" aria-label="Username" aria-describedby="basic-addon1" name="tecnicoForm">
+          </div>
+    </div>
+
+    <div class="col-3">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Data inicio</span>
+            <input type="date" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="dataInicioForm">
+          </div>
+    </div>
+    <div class="col-3">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Data Fim</span>
+            <input type="date" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="dataFimForm">
+          </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-4">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Vendedor</span>
+            <input type="text" class="form-control" placeholder="Vendedor responsável pela venda" aria-label="Username" aria-describedby="basic-addon1" name="vendedorForm">
+          </div>
+    </div>
+    <div class="col-4">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Usuário</span>
+            <input type="text" class="form-control" placeholder="Usuário responsável pela ativação" aria-label="Username" aria-describedby="basic-addon1" name="usuarioForm">
+          </div>
+    </div>
+    <div class="col-4">
+        <div class="input mb-3">
+            
+              <span class="input-text">Extra</span>
+            <select class="custom-select" id="inputGroupSelect01">
+              <option selected></option>
+              <option value="1">Sim</option>
+              <option value="2">Não</option>
+            </select>
+          </div>
+    </div>
+</div>
+
+                                              <button type="button" class="btn btn-success mr-2" >Pesquisar</button>
+                                              <button type="button" class="btn btn-secondary" onclick="instalacaoController.limparCampos()">Limpar</button>
+                                        </div>
+                                        <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <table id="example1" class="table table-bordered table-hover">
+                                                <thead class="bg-info">
+                                                    <tr class="text-center">
+
+                                                        <th>Contrato-Nome</th>
+                                                        <th>Plano</th>
+                                                        <th>Preço</th>
+                                                        <th>Data de Cadastro</th>
+                                                        <th>Data Finalização</th>
+                                                        <th>Vendedor</th>
+                                                        <th>Usuário R. Cadastro</th>
+                                                        <th>Técnico Responsável</th>
+                                                        <th>Usuario Finaliza</th>
+                                                        <th>Extra</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                 
+                                                    <% for(var i=0; i < instalacoes.length; i++) { %>
+                                                        <tr>
+
+                                                            <td>
+                                                                <a href="https://radnet.c.sgp.net.br/admin/cliente/<%= instalacoes[i].Cliente %>/edit/" target="_blank">
+                                                                <%= instalacoes[i].Contrato_Nome %>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Plano %>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Preço %>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Data_de_Cadastro %>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Data_finalização %>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Vendedor %>
+                                                            </td>
+                                                      
+                                                            <td>
+                                                                <%= instalacoes[i].Usuário_R_Cadastro %>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Técnico_responsável %>
+                                                            </td>
+                                                            <td>
+                                                                <%= instalacoes[i].Usuario_Finaliza %>
+                                                            </td>
+                                                            <td>
+                                                                <% if( instalacoes[i].Extra == '1') { %>
+                                                                        Sim
+                                                                    <% }else{ %>
+                                                                            Não
+                                                                        <% } %>
+                                                                
+                                                            </td>
+                                                        
+                                                            
+
+                                                        </tr>
+                                                        <% } %>
+                                                     
+
+                                                </tbody>
+                                           
+                                                <tfoot>
+                                                    <tr class="text-center">
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        
+                                                    
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="assets/controllers/instalacaoController.js"></script>
+<script>
+    let instalacaoController = new InstalacaoController();
+  </script>
