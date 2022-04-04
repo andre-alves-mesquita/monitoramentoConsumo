@@ -106,5 +106,47 @@ class InstalacaoController {
       tecnico,
       responsavel
     );
+    $("#bodyTable").empty();
+
+    instalacoes.forEach((element) => {
+      $("#bodyTable").append(`
+      <tr>
+      <td>
+      ${element.Contrato_Nome}
+      </td>
+      <td>
+      ${element.Plano}
+      </td>
+      <td>
+      ${element.Preço}
+      </td>
+      <td>
+      ${element.Data_de_Cadastro}
+      </td>
+      <td>
+      ${element.Data_finalização}
+      </td>
+      <td>
+      ${element.Vendedor}
+      </td>
+  
+      <td>
+      ${element.Usuário_R_Cadastro}
+      </td>
+      <td>
+      ${element.Técnico_responsável}
+      </td>
+      <td>
+      ${element.Usuario_Finaliza}
+      </td>
+      <td>
+      ${element.extra}
+          
+      </td>
+  
+  </tr>
+  
+      `);
+    });
   }
 }

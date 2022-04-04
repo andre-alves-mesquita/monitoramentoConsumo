@@ -1,7 +1,7 @@
 const conexaoPg = require("../infraestrutura/postgresql/conexaoPg");
 
 class Instalacoes {
-  pegarInstalacoes() {
+  pegarInstalacoes(queryFinal) {
     return new Promise((resolve, reject) => {
       try {
         const sql = `
@@ -18,7 +18,7 @@ class Instalacoes {
         ,(select COUNT(at2.tag) as "Extra" from admcore_clientecontrato CC
         inner join admcore_clientecontrato_tags act on (act.clientecontrato_id = CC.id)
         inner join admcore_tag at2 on (at2.id = act.tag_id)
-        where CC.id = 33082 and at2.tag = 'Extra') as Extra
+        where CC.id = ac.id and at2.tag = 'Extra') as Extra
         from admcore_clientecontrato ac      
         inner join admcore_cliente C on (C.id = ac.cliente_id)
         inner join admcore_pessoa ap on (ap.id = C.pessoa_id)  --
@@ -33,13 +33,14 @@ class Instalacoes {
         where av.ativo = true
         and ap2.descricao != 'Clientes Cancelados'  and ap2.descricao != 'RadNet-Colaborador'   
         and ao.motivoos_id = 1
-                
+        ${queryFinal}   
         `;
 
         conexaoPg.query(sql, (erro, resultados) => {
           if (erro) {
             console.log(erro);
           }
+
           var instalacoes = JSON.parse(JSON.stringify(resultados));
 
           resolve(instalacoes);
