@@ -6,6 +6,7 @@ class Instalacoes {
       try {
         const sql = `
         Select distinct 
+        C.id as "Cliente",
         CONCAT  (ac.id, ' - ', ap.nome) AS "Contrato_Nome",
         ap2.descricao as "Plano",
         ap2.preco as "Preço",

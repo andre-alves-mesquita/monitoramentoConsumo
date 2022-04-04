@@ -23,16 +23,28 @@ module.exports = (app) => {
     let queryExtra = "";
     let queryFinal = "";
 
+    /*
+    console.log(dataInicio);
+    console.log(dataFim);
+    console.log(extra);
+    console.log(vendedor);
+    console.log(usuario);
+    console.log(tecnico);
+    console.log(responsavel);
+*/
     if (dataInicio != "") {
-      queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
+      queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
     }
 
     if (dataFim != "") {
-      queryDataFim += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD') `;
+      queryDataFim += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD') `;
     }
 
     if (extra == "sim") {
-      queryExtra += "";
+      queryExtra += `and (select COUNT(at2.tag) as "Extra" from admcore_clientecontrato CC
+      inner join admcore_clientecontrato_tags act on (act.clientecontrato_id = CC.id)
+      inner join admcore_tag at2 on (at2.id = act.tag_id)
+      where CC.id = ac.id and at2.tag = 'Extra') > 0 `;
     }
 
     if (vendedor) {
@@ -82,88 +94,11 @@ module.exports = (app) => {
 
     let instalacoes = await Instalacoes.pegarInstalacoes(queryFinal);
 
+    console.log(instalacoes.rows);
+
     res.render("premiacao/premiacao", {
       instalacoes: instalacoes.rows,
     });
-  });
-
-  app.post("/buscar-premiacoes", async (req, res) => {
-    let dataInicio = req.query.dataInicio;
-    let dataFim = req.query.dataFim;
-    let extra = req.query.extra;
-    let vendedor = req.query.vendedor;
-    let usuario = req.query.usuario;
-    let tecnico = req.query.tecnico;
-    let responsavel = req.query.responsavel;
-    let queryDataInicio = "";
-    let queryDataFim = "";
-    let queryVendedor = "";
-    let queryUsuario = "";
-    let queryTecnico = "";
-    let queryResponsavel = "";
-    let queryExtra = "";
-    let queryFinal = "";
-
-    if (dataInicio != "") {
-      queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
-    }
-
-    if (dataFim != "") {
-      queryDataFim += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD') `;
-    }
-
-    if (extra == "sim") {
-      queryExtra += "";
-    }
-
-    if (vendedor.length != 0) {
-      const vendedorArray = vendedor.split(",");
-      vendedorArray.forEach((element) => {
-        queryVendedor += ` and av.nome = '${element}' `;
-      });
-    } else {
-      queryVendedor = "";
-    }
-
-    if (usuario.length != 0) {
-      const usuarioArray = usuario.split(",");
-      usuarioArray.forEach((element) => {
-        queryUsuario += ` and au.name = '${element}' `;
-      });
-    } else {
-      queryUsuario = "";
-    }
-
-    if (responsavel.length != 0) {
-      const responsavelArray = responsavel.split(",");
-      responsavelArray.forEach((element) => {
-        queryResponsavel += ` and au.name = '${element}' `;
-      });
-    } else {
-      queryResponsavel = "";
-    }
-
-    if (tecnico.length != 0) {
-      const tecnicoArray = tecnico.split(",");
-      tecnicoArray.forEach((element) => {
-        queryTecnico += ` and au.name = '${element}' `;
-      });
-    } else {
-      queryTecnico = "";
-    }
-
-    queryFinal +=
-      queryDataInicio +
-      queryDataFim +
-      queryExtra +
-      queryResponsavel +
-      queryTecnico +
-      queryVendedor +
-      queryUsuario;
-
-    let instalacoes = await Instalacoes.pegarInstalacoes(queryFinal);
-
-    res.status(200).json(instalacoes.rows);
   });
 
   app.get("/buscar-usuarios-premiacao", async (req, res) => {
