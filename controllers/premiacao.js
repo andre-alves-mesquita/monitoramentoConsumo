@@ -142,6 +142,10 @@ module.exports = (app) => {
             vendedor: element.Vendedor,
             vendas: 1,
           });
+        } else {
+          vendedores.valorVenda += remuneracaoTotal;
+          vendedores.valorInstalacao += remuneracaoTecnico;
+          vendedoresVendas.vendas += 1;
         }
       }
     });
