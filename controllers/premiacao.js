@@ -3,7 +3,11 @@ const moment = require("moment"); // require
 
 module.exports = (app) => {
   app.get("/premiacao", async (req, res) => {
-    res.render("premiacao/premiacao", { instalacoes: null });
+    res.render("premiacao/premiacao", {
+      instalacoes: null,
+      demonstrativoQuantitativo: null,
+      demonstrativoGeral: null,
+    });
   });
 
   app.post("/premiacao", async (req, res) => {
@@ -22,16 +26,13 @@ module.exports = (app) => {
     let queryResponsavel = "";
     let queryExtra = "";
     let queryFinal = "";
+    let remuneracao = 0;
+    let remuneracaoTotal = 0;
+    let remuneracaoTecnico = 0;
+    let vendedoresNome = [];
+    let vendedores = [];
+    let vendedoresVendas = [];
 
-    /*
-    console.log(dataInicio);
-    console.log(dataFim);
-    console.log(extra);
-    console.log(vendedor);
-    console.log(usuario);
-    console.log(tecnico);
-    console.log(responsavel);
-*/
     if (dataInicio != "") {
       queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
     }
@@ -94,10 +95,61 @@ module.exports = (app) => {
 
     let instalacoes = await Instalacoes.pegarInstalacoes(queryFinal);
 
-    console.log(instalacoes.rows);
+    instalacoes.rows.forEach((element) => {
+      remuneracao = Number(element.Preço) / 2;
+
+      if (element.extra == "1") {
+        if (element.Vendedor == element.Técnico_responsável) {
+          remuneracaoTotal = remuneracaoTecnico + remuneracao;
+          remuneracaoTecnico = 0;
+        } else {
+          remuneracaoTecnico = 50;
+          remuneracaoTotal = remuneracao;
+        }
+      } else {
+        remuneracaoTotal = remuneracao;
+        remuneracaoTecnico = 0;
+      }
+
+      element.remuneracaoTecnico = remuneracaoTecnico;
+      element.remuneracaoTotal = remuneracaoTotal;
+
+      console.log(vendedoresNome.length);
+
+      if (vendedoresNome.length == 0) {
+        vendedoresNome.push(element.Vendedor);
+
+        vendedores.push({
+          vendedor: element.Vendedor,
+          valorVenda: remuneracaoTotal,
+          valorInstalacao: remuneracaoTecnico,
+        });
+
+        vendedoresVendas.push({
+          vendedor: element.Vendedor,
+          vendas: 1,
+        });
+      } else {
+        if (!vendedoresNome.includes(element.Vendedor)) {
+          vendedoresNome.push(element.Vendedor);
+          vendedores.push({
+            vendedor: element.Vendedor,
+            valorVenda: remuneracaoTotal,
+            valorInstalacao: remuneracaoTecnico,
+          });
+
+          vendedoresVendas.push({
+            vendedor: element.Vendedor,
+            vendas: 1,
+          });
+        }
+      }
+    });
 
     res.render("premiacao/premiacao", {
       instalacoes: instalacoes.rows,
+      demonstrativoQuantitativo: vendedores,
+      demonstrativoGeral: vendedoresVendas,
     });
   });
 
