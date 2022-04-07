@@ -5,8 +5,10 @@ module.exports = (app) => {
   app.get("/premiacao", async (req, res) => {
     res.render("premiacao/premiacao", {
       instalacoes: null,
-      demonstrativoQuantitativo: null,
-      demonstrativoGeral: null,
+      demonstrativoQuantitativoLabel: null,
+      demonstrativoQuantitativoQtd: null,
+      vendedoresValorVendas: null,
+      vendedoresValorInstalacoes: null,
     });
   });
 
@@ -29,9 +31,12 @@ module.exports = (app) => {
     let remuneracao = 0;
     let remuneracaoTotal = 0;
     let remuneracaoTecnico = 0;
-    let vendedoresNome = [];
-    let vendedores = [];
-    let vendedoresVendas = [];
+    let vendedoresLabel = [];
+    let vendedoresQtdVendas = [];
+    let vendedoresValorVendas = [];
+    let vendedoresValorInstalacoes = [];
+    let valorVendasArredondado = [];
+    let valorInstalacoesArredondado = [];
 
     if (dataInicio != "") {
       queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
@@ -100,11 +105,11 @@ module.exports = (app) => {
 
       if (element.extra == "1") {
         if (element.Vendedor == element.Técnico_responsável) {
-          remuneracaoTotal = remuneracaoTecnico + remuneracao;
-          remuneracaoTecnico = 0;
-        } else {
-          remuneracaoTecnico = 50;
           remuneracaoTotal = remuneracao;
+          remuneracaoTecnico = 50;
+        } else {
+          remuneracaoTotal = remuneracao;
+          remuneracaoTecnico = 0;
         }
       } else {
         remuneracaoTotal = remuneracao;
@@ -114,46 +119,44 @@ module.exports = (app) => {
       element.remuneracaoTecnico = remuneracaoTecnico;
       element.remuneracaoTotal = remuneracaoTotal;
 
-      console.log(vendedoresNome.length);
-
-      if (vendedoresNome.length == 0) {
-        vendedoresNome.push(element.Vendedor);
-
-        vendedores.push({
-          vendedor: element.Vendedor,
-          valorVenda: remuneracaoTotal,
-          valorInstalacao: remuneracaoTecnico,
-        });
-
-        vendedoresVendas.push({
-          vendedor: element.Vendedor,
-          vendas: 1,
-        });
+      if (vendedoresLabel.length == 0) {
+        vendedoresLabel.push(element.Vendedor);
+        vendedoresQtdVendas.push(1);
+        vendedoresValorVendas.push(remuneracaoTotal);
+        vendedoresValorInstalacoes.push(remuneracaoTecnico);
       } else {
-        if (!vendedoresNome.includes(element.Vendedor)) {
-          vendedoresNome.push(element.Vendedor);
-          vendedores.push({
-            vendedor: element.Vendedor,
-            valorVenda: remuneracaoTotal,
-            valorInstalacao: remuneracaoTecnico,
-          });
-
-          vendedoresVendas.push({
-            vendedor: element.Vendedor,
-            vendas: 1,
-          });
+        if (vendedoresLabel.includes(element.Vendedor)) {
+          for (let index = 0; index < vendedoresLabel.length; index++) {
+            if (vendedoresLabel[index] == element.Vendedor) {
+              vendedoresQtdVendas[index] += 1;
+              vendedoresValorVendas[index] += remuneracaoTotal;
+              vendedoresValorInstalacoes[index] += remuneracaoTecnico;
+            }
+          }
         } else {
-          vendedores.valorVenda += remuneracaoTotal;
-          vendedores.valorInstalacao += remuneracaoTecnico;
-          vendedoresVendas.vendas += 1;
+          vendedoresLabel.push(element.Vendedor);
+          vendedoresQtdVendas.push(1);
+          vendedoresValorVendas.push(remuneracaoTotal);
+          vendedoresValorInstalacoes.push(remuneracaoTecnico);
         }
       }
     });
 
+    for (let index = 0; index < vendedoresValorVendas.length; index++) {
+      valorVendasArredondado.push(vendedoresValorVendas[index].toFixed(2));
+      valorInstalacoesArredondado.push(
+        vendedoresValorInstalacoes[index].toFixed(2)
+      );
+    }
+    console.log(valorVendasArredondado);
+    console.log(valorInstalacoesArredondado);
+
     res.render("premiacao/premiacao", {
       instalacoes: instalacoes.rows,
-      demonstrativoQuantitativo: vendedores,
-      demonstrativoGeral: vendedoresVendas,
+      demonstrativoQuantitativoLabel: vendedoresLabel,
+      demonstrativoQuantitativoQtd: vendedoresQtdVendas,
+      vendedoresValorVendas: valorVendasArredondado,
+      vendedoresValorInstalacoes: valorInstalacoesArredondado,
     });
   });
 

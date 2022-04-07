@@ -289,8 +289,19 @@
 
     $(function () {
 
+      vendedoresValorVendas = "<%= vendedoresValorVendas %>";
+      vendedoresValorInstalacoes = "<%= vendedoresValorInstalacoes %>";
+      ArrayvendedoresValorVendas = vendedoresValorVendas.split(",")
+      ArrayvendedoresValorInstalacoes = vendedoresValorInstalacoes.split(",")
+
+nomeLavels = "<%= demonstrativoQuantitativoLabel %>";
+qtdLavels = "<%= demonstrativoQuantitativoQtd %>";
+arrayNome = nomeLavels.split(",")
+qtdLavels = qtdLavels.split(",")
+
+
         var areaChartData = {
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels  : arrayNome,
       datasets: [
         {
           label               : 'Valor em vendas',
@@ -301,10 +312,10 @@
           pointStrokeColor    : 'rgba(60,141,188,1)',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
+          data                : ArrayvendedoresValorVendas
         },
         {
-          label               : 'Valor Em instalações',
+          label               : 'Valor em instalações',
           backgroundColor     : 'rgba(210, 214, 222, 1)',
           borderColor         : 'rgba(210, 214, 222, 1)',
           pointRadius         : false,
@@ -312,7 +323,7 @@
           pointStrokeColor    : '#c1c7d1',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
+          data                : ArrayvendedoresValorInstalacoes
         },
       ]
     }
@@ -334,61 +345,13 @@
 
       new Chart(barChartCanvas, {
         type: "bar",
-        data: "<%= demonstrativoQuantitativo %>",
+        data: areaChartData,
         options: barChartOptions,
       });
 
 
-      
-      var areaChartData = {
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label               : 'Digital Goods',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : false,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
-        },
-        {
-          label               : 'Electronics',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
-        },
-      ]
-    }
-
-    var areaChartOptions = {
-      maintainAspectRatio : false,
-      responsive : true,
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }],
-        yAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }]
-      }
-    }
-
     var donutData        = {
+      
       /*
         labels: [
       'Chrome',
@@ -396,12 +359,38 @@
           'FireFox'
       ],
       */
-      labels: "<%= demonstrativoQuantitativo %>",
+      
+
+      labels: arrayNome,
+      
       datasets: [
         {
           //data: [700,500,400],
-          data: "<%= demonstrativoQuantitativo %>",
-          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+          data: qtdLavels,
+          backgroundColor : [
+            '#f56954',
+            '#00a65a',
+            '#f39c12',
+            '#00c0ef',
+            '#3c8dbc',
+            '#d2d6de',
+            '#7D3D3D',
+            '#908322',
+            '#629340',
+            '#159811',
+            '#52D781',
+            '#41C6BC',
+            '#2E71B4',
+            '#1D1DC1',
+            '#552FD0',
+            '#651AB0',
+            '#C519D4',
+            '#A71093',
+            '#ED028B',
+            '#E4033F',
+            '#E50812',
+            '#DE641D',
+          ],
         }
       ]
     }
