@@ -106,11 +106,11 @@ module.exports = (app) => {
 
       if (element.extra == "1") {
         if (element.Vendedor == element.Técnico_responsável) {
-          remuneracaoTotal = remuneracao;
-          remuneracaoTecnico = 50;
+          remuneracaoTotal = remuneracao + 50;
+          remuneracaoTecnico = 0;
         } else {
           remuneracaoTotal = remuneracao;
-          remuneracaoTecnico = 0;
+          remuneracaoTecnico = 50;
         }
       } else {
         remuneracaoTotal = remuneracao;
