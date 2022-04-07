@@ -100,7 +100,7 @@
     </div>
 </div>
 
-<div class="content">
+<div class="content" id="graficos">
     <div class="content-fluid">
         <div class="row">
             <div class="col-lg-6">
@@ -156,7 +156,7 @@
 
 
         
-    <div class="content">
+    <div class="content" id="tabelaInstalacoes">
         <div class="content-fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -289,6 +289,17 @@
 
     $(function () {
 
+      exibirJanelas = "<%= exibirJanelas %>";
+      let displayGraficos = document.querySelector("#graficos");
+      let tabelaInstalacoes = document.querySelector("#tabelaInstalacoes");
+
+      
+
+   
+
+
+      if(exibirJanelas){
+
       vendedoresValorVendas = "<%= vendedoresValorVendas %>";
       vendedoresValorInstalacoes = "<%= vendedoresValorInstalacoes %>";
       ArrayvendedoresValorVendas = vendedoresValorVendas.split(",")
@@ -414,5 +425,9 @@ qtdLavels = qtdLavels.split(",")
       data: pieData,
       options: pieOptions
     })
+  }else{
+    $(displayGraficos).empty();
+    $(tabelaInstalacoes).empty();
+  }
     });
   </script>

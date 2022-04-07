@@ -9,6 +9,7 @@ module.exports = (app) => {
       demonstrativoQuantitativoQtd: null,
       vendedoresValorVendas: null,
       vendedoresValorInstalacoes: null,
+      exibirJanelas: null,
     });
   });
 
@@ -157,6 +158,7 @@ module.exports = (app) => {
       demonstrativoQuantitativoQtd: vendedoresQtdVendas,
       vendedoresValorVendas: valorVendasArredondado,
       vendedoresValorInstalacoes: valorInstalacoesArredondado,
+      exibirJanelas: true,
     });
   });
 

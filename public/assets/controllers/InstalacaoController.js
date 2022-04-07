@@ -50,7 +50,6 @@ class InstalacaoController {
       );
     });
   }
-
   pesquisarFormulario() {
     let dataInicioForm = $('input[name="dataInicioForm"]').val();
     let dataFimForm = $('input[name="dataFimForm"]').val();
@@ -129,7 +128,6 @@ class InstalacaoController {
       <td>
       ${element.Vendedor}
       </td>
-  
       <td>
       ${element.Usuário_R_Cadastro}
       </td>
@@ -141,9 +139,7 @@ class InstalacaoController {
       </td>
       <td>
       ${element.extra}
-          
       </td>
-  
   </tr>
   
       `);

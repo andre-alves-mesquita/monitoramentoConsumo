@@ -17,6 +17,12 @@ const app = express();
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  app.use(cors());
+  next();
+});
+
 var options = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
