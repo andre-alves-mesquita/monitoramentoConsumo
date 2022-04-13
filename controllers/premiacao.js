@@ -1,8 +1,9 @@
 const Instalacoes = require("../models/instalacoes");
 const moment = require("moment"); // require
+const isAuth = require("../middlewares/auth");
 
 module.exports = (app) => {
-  app.get("/premiacao", async (req, res) => {
+  app.get("/premiacao", isAuth, async (req, res) => {
     res.render("premiacao/premiacao", {
       instalacoes: null,
       demonstrativoQuantitativoLabel: null,
@@ -13,7 +14,7 @@ module.exports = (app) => {
     });
   });
 
-  app.post("/premiacao", async (req, res) => {
+  app.post("/premiacao", isAuth, async (req, res) => {
     let dataInicio = req.body.dataInicioForm;
     let dataFim = req.body.dataFimForm;
     let extra = req.body.extraForm;
@@ -72,22 +73,22 @@ module.exports = (app) => {
       queryUsuario = "";
     }
 
-    if (responsavel) {
-      const responsavelArray = responsavel.split(",");
-      responsavelArray.forEach((element) => {
-        queryResponsavel += ` and au.name = '${element}' `;
-      });
-    } else {
-      queryResponsavel = "";
-    }
-
     if (tecnico) {
       const tecnicoArray = tecnico.split(",");
       tecnicoArray.forEach((element) => {
-        queryTecnico += ` and au.name = '${element}' `;
+        queryTecnico += ` and au2.name = '${element}' `;
       });
     } else {
       queryTecnico = "";
+    }
+
+    if (responsavel) {
+      const responsavelArray = responsavel.split(",");
+      responsavelArray.forEach((element) => {
+        queryResponsavel += ` and au3.name = '${element}' `;
+      });
+    } else {
+      queryResponsavel = "";
     }
 
     queryFinal +=

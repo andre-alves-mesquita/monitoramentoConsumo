@@ -4,6 +4,7 @@ class Tabelas {
 
     this.criarTabelaConsumoInternet();
     this.criarTabelaUsuarios();
+    this.criarTabelaUsuarioLogado();
   }
 
   criarTabelaConsumoInternet() {
@@ -57,6 +58,25 @@ class Tabelas {
         console.log(erro);
       } else {
         console.log("Tabela usuarios criada com sucesso");
+      }
+    });
+  }
+
+  criarTabelaUsuarioLogado() {
+    const sql = `
+      CREATE TABLE IF NOT EXISTS usuario_logado(
+        id int NOT NULL AUTO_INCREMENT,
+        id_usuario int,  
+        nome_usuario varchar(255),
+        data_login date,
+        PRIMARY KEY(id) 
+      )
+      `;
+    this.conexao.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        console.log("Tabela usuario_logado criada com sucesso");
       }
     });
   }

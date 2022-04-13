@@ -4,6 +4,46 @@ class InstalacaoController {
     this.buscarUsuarios();
     this.buscarResponsaveis();
     this.buscarVendedores();
+    this.preencherCamposFormulario();
+  }
+
+  preencherCamposFormulario() {
+    let dataInicioForm = localStorage.getItem("dataInicioForm");
+    let dataFimForm = localStorage.getItem("dataFimForm");
+    let extraForm = localStorage.getItem("extraForm");
+
+    if (dataInicioForm == null && dataFimForm == null && extraForm == null) {
+      let dataAtual = moment().format("DD-MM-YYYY");
+      let arrayDataAtual = dataAtual.split("-");
+
+      let dataInicioMes = moment([
+        arrayDataAtual[2],
+        arrayDataAtual[1] - 1,
+        arrayDataAtual[0],
+      ])
+        .startOf("month")
+        .format("YYYY-MM-DD");
+
+      let dataFimMes = moment([
+        arrayDataAtual[2],
+        arrayDataAtual[1] - 1,
+        arrayDataAtual[0],
+      ])
+        .endOf("month")
+        .format("YYYY-MM-DD");
+
+      document.querySelector('input[name="dataInicioForm"]').value =
+        dataInicioMes;
+
+      document.querySelector('input[name="dataFimForm"]').value = dataFimMes;
+    } else {
+      document.querySelector('input[name="dataInicioForm"]').value =
+        dataInicioForm;
+
+      document.querySelector('input[name="dataFimForm"]').value = dataFimForm;
+
+      document.querySelector('select[name="extraForm"]').value = extraForm;
+    }
   }
 
   limparCampos() {
@@ -50,6 +90,19 @@ class InstalacaoController {
       );
     });
   }
+  guardarInformacoesFormulario() {
+    let dataInicioForm = $('input[name="dataInicioForm"]').val();
+    let dataFimForm = $('input[name="dataFimForm"]').val();
+    let extraForm = $('select[name="extraForm"]').val();
+
+    localStorage.clear();
+
+    localStorage.setItem("dataInicioForm", dataInicioForm);
+    localStorage.setItem("dataFimForm", dataFimForm);
+    localStorage.setItem("extraForm", extraForm);
+  }
+
+  /*
   pesquisarFormulario() {
     let dataInicioForm = $('input[name="dataInicioForm"]').val();
     let dataFimForm = $('input[name="dataFimForm"]').val();
@@ -144,5 +197,5 @@ class InstalacaoController {
   
       `);
     });
-  }
+  }*/
 }

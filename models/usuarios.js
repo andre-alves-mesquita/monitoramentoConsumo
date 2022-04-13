@@ -53,6 +53,59 @@ class Usuarios {
       }
     });
   }
+  buscarUsuario(id) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `SELECT * FROM usuarios WHERE id=${id} LIMIT 1`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          var usuario = JSON.parse(JSON.stringify(resultados));
+          resolve(usuario);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  atualizarUsuario(usuario, id) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `UPDATE usuarios SET ? WHERE id=${id}`;
+
+        conexaoMs.query(sql, usuario, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          console.log(resultados);
+          resolve("cadastro atualizado com sucesso");
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  buscarUsuarioLogin(login) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `SELECT * FROM usuarios WHERE login='${login}'`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          var usuario = JSON.parse(JSON.stringify(resultados));
+          resolve(usuario);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 module.exports = new Usuarios();

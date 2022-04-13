@@ -1,6 +1,8 @@
 const Consumo = require("../models/consumoInternetClienteMysql");
 const Usuario = require("../models/usuarios");
+const Sessao = require("../models/sessao");
 const isAuth = require("../middlewares/auth");
+const moment = require("moment"); // require
 require("dotenv").config(); //carregar configurações do dotenv
 
 module.exports = (app) => {
@@ -19,6 +21,23 @@ module.exports = (app) => {
         res.redirect("/?erro=" + "nao foi possivel altenticar");
       } else {
         req.session.isAuth = true;
+
+        let usuarioLogando = usuarioLogado[0];
+
+        console.log(usuarioLogando);
+
+        req.session.id_usuario = usuarioLogando.id;
+        req.session.nome = usuarioLogando.login;
+        req.session.usuario = usuarioLogando.usuario;
+
+        Sessao.deletarUsuarioLogado(usuarioLogando.id);
+
+        Sessao.InserirUsuarioLogado({
+          id_usuario: usuarioLogando.id,
+          nome_usuario: usuarioLogando.login,
+          data_login: moment().format("YYYY-MM-DD"),
+        });
+
         res.redirect("/home");
       }
     } else {
@@ -31,6 +50,7 @@ module.exports = (app) => {
   });
 
   app.get("/logout", async (req, res) => {
+    Sessao.deletarUsuarioLogado(req.session.id_usuario);
     req.session.destroy((err) => {
       if (err) throw err;
       res.redirect("/");
@@ -57,5 +77,12 @@ module.exports = (app) => {
 
   app.get("/terms", isAuth, async (req, res) => {
     res.render("terms");
+  });
+
+  app.get("/pegar-usuario", async (req, res) => {
+    console.log(req.session.id_usuario);
+    let nome = await Sessao.pegarUsuarioLogado(req.session.id_usuario);
+
+    res.status(200).json(nome);
   });
 };
