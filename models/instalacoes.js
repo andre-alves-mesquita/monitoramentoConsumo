@@ -9,7 +9,7 @@ class Instalacoes {
         C.id as "Cliente",
         CONCAT  (ac.id, ' - ', ap.nome) AS "Contrato_Nome",
         ap2.descricao as "Plano",
-        ap2.preco as "Preço",
+        (ap2.preco- ap2.desconto) as "Preço",
         TO_CHAR(ac.data_cadastro, 'DD/MM/YYYY HH:mm:ss') as "Data_de_Cadastro",
         TO_CHAR(ao2.data_finalizacao, 'DD/MM/YYYY HH:mm:ss') as "Data_finalização",
         av.nome as "Vendedor",

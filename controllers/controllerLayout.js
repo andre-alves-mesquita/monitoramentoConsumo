@@ -46,7 +46,49 @@ module.exports = (app) => {
   });
 
   app.get("/home", isAuth, async (req, res) => {
-    res.render("index");
+    moment.locale("pt");
+    moment.updateLocale("pt", {
+      months: [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ],
+    });
+
+    let dataAtual = moment().format("DD-MM-YYYY");
+    let arrayDataAtual = dataAtual.split("-");
+    let dataInicioMes = moment([
+      arrayDataAtual[2],
+      arrayDataAtual[1] - 1,
+      arrayDataAtual[0],
+    ])
+      .startOf("month")
+      .format("DD-MM-YYYY");
+
+    let dataFimMes = moment([
+      arrayDataAtual[2],
+      arrayDataAtual[1] - 1,
+      arrayDataAtual[0],
+    ])
+      .endOf("month")
+      .format("DD-MM-YYYY");
+
+    let mes = moment().format("MMMM");
+
+    res.render("home/index", {
+      mes: mes,
+      inicioMes: dataInicioMes,
+      fimMes: dataFimMes,
+    });
   });
 
   app.get("/logout", async (req, res) => {
