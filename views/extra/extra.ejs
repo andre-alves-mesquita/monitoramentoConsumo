@@ -1,0 +1,61 @@
+
+
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+  
+    </div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-dark">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-user"></i></span> Eleição para Extra</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="" method="post">
+                            <div class="row">
+                             
+                                    <div class="col-6">
+                                        <div class="input mb-3">   
+                                            <span class="input-text">Funcionarios disponíveis para extra <strong class="text-danger small">Selecione para promoção</strong></span>
+                                            <select class="custom-select" multiple aria-label="multiple select example" size="3" name="semExtra" id="selectVendedorForm">
+                                                 <% for(var i=0; i < funcionarios.length; i++) {  %>    
+                                                    <option><%= funcionarios[i] %></option>
+                                                    <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="input mb-3">   
+                                            <span class="input-text">Funcionarios já possuem privilégio de  extra <strong class="text-danger small">Selecione para remoção de promoção</strong></span>
+                                            <select class="custom-select" multiple aria-label="multiple select example" size="3" name="comExtra" id="selectVendedorForm">
+                                                <% for(var i=0; i < extras.length; i++) {  %>    
+                                                    <option><%= extras[i] %></option>
+                                                    <% } %>
+                                            </select>
+                                        </div>
+                                    </div>  
+                            
+                            </div>
+                            <row>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-success mr-2">Salvar</button>
+                                </div>
+                            </row>
+                        </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+

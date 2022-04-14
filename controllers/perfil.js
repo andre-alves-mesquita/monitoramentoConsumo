@@ -9,6 +9,6 @@ module.exports = (app) => {
   app.get("/perfil/:id", isAuth, async (req, res) => {
     let usuario = await Usuario.buscarUsuario(req.session.id_usuario);
 
-    res.render("perfil/perfil", { usuario: usuario[0] });
+    res.render("perfil/index", { usuario: usuario[0] });
   });
 };

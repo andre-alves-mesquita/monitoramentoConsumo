@@ -1,3 +1,95 @@
-<%- include('../layout-header'); -%> 
-<%- include('index'); -%> 
-<%- include('../layout-footer'); -%>
+
+
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+  
+    </div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-dark">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-user"></i></span>   Perfil</strong></h4>
+                        </div>
+                        <div class="card-body">
+                     
+                            <div class="row">
+                                <div class="col-12">
+                                   
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                        
+
+<div class="row">
+   
+
+    <div class="col-4">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Login</span>
+            <input type="text" class="form-control" placeholder="login (sem espaço)" aria-label="Username" aria-describedby="basic-addon1" name="Login" value="<%= usuario.login %>">
+          </div>
+    </div>
+    <div class="col-4">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">E-mail</span>
+            <input type="text" class="form-control" placeholder="exemplo@exemplo.com.br" aria-label="Username" aria-describedby="basic-addon1" name="email" value="<%= usuario.email %>">
+          </div>
+    </div>
+    <div class="col-2">
+        
+            <div class="input mb-3">
+                <span class="input-text" id="basic-addon1">Nova Senha</span>
+                <input type="password" class="form-control" placeholder="Senha" aria-label="Username" aria-describedby="basic-addon1" name="senha" >
+              </div>
+        
+        
+          
+        </div>
+        <div class="col-2">
+        
+            <div class="input mb-3">
+                <span class="input-text" id="basic-addon1">Confirmar Nova Senha</span>
+                <input type="password" class="form-control" placeholder="Senha" aria-label="Username" aria-describedby="basic-addon1" name="confSenha">
+              </div>
+        
+        
+          
+        </div>
+        
+
+    </div>
+    <div class="row" id="erro">
+      
+    </div>
+</div>
+                                              <button type="button" class="btn btn-success mr-2" onclick="perfilController.atualizarDados()">Atualizar</button>
+                                              
+                                            
+                                        </div>
+                                                                      
+                                        <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+</div>
+<script src="assets/config/config.js"></script>
+<script src="assets/controllers/Ajax/perfilAjax.js"></script>
+<script src="assets/controllers/PerfilController.js"></script>
+<script>
+    let perfilController = new PerfilController();
+</script>
+
+
+
+

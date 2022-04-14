@@ -1,5 +1,166 @@
-<%- include('../layout-header'); -%>
 
-    <%- include('index'); -%>
 
-        <%- include('../layout-footer'); -%>
+
+
+        <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+        <!--
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 card">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>-->
+    </div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-tachometer-alt"></i></span> Consumo
+                                    internet</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-4  col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-warning"><i
+                                                class="fas fa-tachometer-alt"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Maior banda consumida </span>
+                                            <span class="info-box-number">
+                                                <% if( maior>= 1000) { %>
+
+                                                    <%- maior/1000 %> TB
+
+                                                        <% } %>
+
+                                                            <% if(maior< 1000 && maior> 1) { %>
+
+                                                                <%- maior %> GB
+
+                                                                    <% } %>
+
+                                                                        <% if(maior< 1) { %>
+
+                                                                            <%- maior*1000 %> MB
+
+                                                                                <% } %>
+
+
+                                            </span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+
+                                <div class="col-md-4  col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-danger"><i
+                                                class="fas fa-tachometer-alt"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Cliente maior consumo</span>
+                                            <span class="info-box-number">
+                                                <%- pessoa %>
+                                            </span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+
+                                <div class="col-md-4  col-12">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-success"><i
+                                                class="fas fa-tachometer-alt"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Qtd. registros buscados</span>
+                                            <span class="info-box-number">
+                                                <%- total %>
+                                            </span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <h3 class="card-title">Tabela de consumo/cliente por mês</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <table id="example2" class="table table-bordered table-hover">
+                                                <thead class="bg-info">
+                                                    <tr>
+
+                                                        <th>Nome Cliente</th>
+                                                        <th>Login cliente</th>
+                                                        <th>Consumo (GB)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% for(var i=0; i < consumoClientes.length; i++) { %>
+                                                        <tr>
+
+                                                            <td>
+                                                                <%= consumoClientes[i].nome %>
+                                                            </td>
+                                                            <td>
+                                                                <%= consumoClientes[i].login %>
+                                                            </td>
+                                                            <td>
+                                                                <%= consumoClientes[i].consumo %>
+                                                            </td>
+
+                                                        </tr>
+                                                        <% } %>
+
+                                                </tbody>
+                                                <!--
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Rendering engine</th>
+                                                        <th>Browser</th>
+                                                        <th>Platform(s)</th>
+                                                        <th>Engine version</th>
+                                                        <th>CSS grade</th>
+                                                    </tr>
+                                                </tfoot>
+
+                                                -->
+
+                                            </table>
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+                                </div>
+                            </div>
+                 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

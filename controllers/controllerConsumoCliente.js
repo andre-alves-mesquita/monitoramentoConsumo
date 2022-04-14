@@ -25,7 +25,7 @@ module.exports = (app) => {
       Consumo.guardarConsumo(element);
     });
 
-    res.render("consumo-internet/consumo-internet", {
+    res.render("consumo-internet/index", {
       consumoClientes: consumo.rows,
       media: media / consumo.rows.length,
       maior: maior,

@@ -1,2 +1,418 @@
-<%- include('../layout-header'); -%> <%- include('index'); -%> <%-
-include('../layout-footer'); -%>
+
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+  
+    </div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-dark">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-file"></i></span>   Formulário de Instalações</strong></h4>
+                        </div>
+                        <div class="card-body">
+                     
+                            <div class="row">
+                                <div class="col-12">
+                                   
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <form method="post" action="/premiacao">
+
+<div class="row">
+   
+
+    <div class="col-6">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Data inicio</span>
+            <input type="date" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="dataInicioForm">
+          </div>
+    </div>
+    <div class="col-6">
+        <div class="input mb-3">
+            <span class="input-text" id="basic-addon1">Data Fim</span>
+            <input type="date" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="dataFimForm">
+          </div>
+    </div>
+
+</div>
+<div class="row mb-3">
+    <div class="col-4">
+        <div class="input mb-3">   
+            <span class="input-text">Vendedor</span>
+            <select class="custom-select" multiple aria-label="multiple select example" size="3" name="selectVendedorForm" id="selectVendedorForm">
+                     
+            </select>
+        </div>
+    </div>
+
+   
+    <div class="col-4">
+        <div class="input mb-3">
+            <span class="input-text">Técnico</span>
+            <select class="custom-select" multiple aria-label="multiple select example" size="3" name="selectTecnicoForm" id="selectTecnicoForm">
+             
+            </select>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="input mb-3">
+            <span class="input-text">Responsável</span>
+            <select class="custom-select" multiple aria-label="multiple select example" size="3" name="selectResponsavelForm" id="selectResponsavelForm">
+      
+            </select>
+        </div>
+   
+    </div>
+</div>
+
+                                              <button type="submit" class="btn btn-success mr-2" onclick="instalacaoController.guardarInformacoesFormulario()">Pesquisar</button>
+                                              <button type="button" class="btn btn-secondary" onclick="instalacaoController.limparCampos()">Limpar</button>
+                                            </form>
+                                        </div>
+                                    
+                                        <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content" id="graficos">
+    <div class="content-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+               <!-- BAR CHART -->
+            <div class="card card-success">
+                <div class="card-header">
+                  <h3 class="card-title"><i class="fas fa-chart-bar"></i> Demonstrativo quantitativo</h3>
+  
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+        </div>
+
+        <div class="col-lg-6">
+           <!-- PIE CHART -->
+           <div class="card card-danger">
+            <div class="card-header">
+              <h3 class="card-title"> <i class="fas fa-chart-pie"></i> Demonstrativo geral</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+     </div>
+    </div>
+</div>
+</div>
+
+
+        
+    <div class="content" id="tabelaInstalacoes">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <table id="example1" class="table table-bordered table-hover">
+                                                <thead class="bg-info">
+                                                    <tr class="text-center">
+
+                                                        <th>Contrato-Nome</th>
+                                                        <th>Plano</th>
+                                                        <th>Preço</th>
+                                                        <th>Vendedor</th>
+                                                        
+                                                        <th>Técnico Responsável</th>
+                                                        <th>Usuario Finaliza</th>
+                                                        <th>Extra</th>
+                                                        <th>Premiação</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyTable">
+                                                 
+
+<% if(instalacoes){ %>
+    <% for(var i=0; i < instalacoes.length; i++) { %>
+        <tr>
+
+            <td>
+                <a href="https://radnet.c.sgp.net.br/admin/cliente/<%= instalacoes[i].Cliente %>/edit/" target="_blank">
+                <%= instalacoes[i].Contrato_Nome %>
+                </a>
+            </td>
+            <td>
+                <%= instalacoes[i].Plano %>
+            </td>
+            <td>
+                <%= instalacoes[i].Preço %>
+            </td>
+      
+            <td>
+                <%= instalacoes[i].Vendedor %>
+            </td>
+      
+         
+            <td>
+                <%= instalacoes[i].Técnico_responsável %>
+            </td>
+            <td>
+                <%= instalacoes[i].Usuario_Finaliza %>
+            </td>
+            <td>
+                
+                <% if( instalacoes[i].extra == '1') { %>
+                        Sim
+                    <% }else{ %>
+                            Não
+                        <% } %>
+                
+            </td>
+            <td>
+                
+                <% if( instalacoes[i].extra == '1' && instalacoes[i].remuneracaoTecnico == 0) { %>
+                        técnico: <% instalacoes[i].remuneracaoTotal %>
+                    <% }else{ %>
+                            Técnico: <%= instalacoes[i].remuneracaoTecnico %><br />
+                            Vendedor: <%= instalacoes[i].remuneracaoTotal %>
+                        <% } %>
+                
+            </td>
+
+        </tr>
+        <% } %>
+    <% } %>
+
+                                               
+                                                     
+
+                                                </tbody>
+                                           <!--
+                                                <tfoot>
+                                                    <tr class="text-center">
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        <th>-</th>
+                                                        
+                                                    
+                                                    </tr>
+                                                </tfoot>
+                                                -->
+                                            </table>
+                                        </div>
+                                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="assets/config/config.js"></script>
+<script src="assets/controllers/Ajax/instalacoesAjax.js"></script>
+<script src="assets/controllers/instalacaoController.js"></script>
+
+<script>
+    let instalacaoController = new InstalacaoController();
+  </script>
+
+
+
+<script>
+
+
+    $(function () {
+
+      exibirJanelas = "<%= exibirJanelas %>";
+      let displayGraficos = document.querySelector("#graficos");
+      let tabelaInstalacoes = document.querySelector("#tabelaInstalacoes");
+
+      
+
+   
+
+
+      if(exibirJanelas){
+
+      vendedoresValorVendas = "<%= vendedoresValorVendas %>";
+      vendedoresValorInstalacoes = "<%= vendedoresValorInstalacoes %>";
+      ArrayvendedoresValorVendas = vendedoresValorVendas.split(",")
+      ArrayvendedoresValorInstalacoes = vendedoresValorInstalacoes.split(",")
+
+nomeLavels = "<%= demonstrativoQuantitativoLabel %>";
+qtdLavels = "<%= demonstrativoQuantitativoQtd %>";
+arrayNome = nomeLavels.split(",")
+qtdLavels = qtdLavels.split(",")
+
+
+        var areaChartData = {
+      labels  : arrayNome,
+      datasets: [
+        {
+          label               : 'Valor em vendas',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : false,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : ArrayvendedoresValorVendas
+        },
+        {
+          label               : 'Valor em instalações',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : false,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : ArrayvendedoresValorInstalacoes
+        },
+      ]
+    }
+      //-------------
+      //- BAR CHART -
+      //-------------
+      var barChartCanvas = $("#barChart").get(0).getContext("2d");
+      var barChartData = $.extend(true, {}, areaChartData);
+      var temp0 = areaChartData.datasets[0];
+      var temp1 = areaChartData.datasets[1];
+      barChartData.datasets[0] = temp1;
+      barChartData.datasets[1] = temp0;
+
+      var barChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        datasetFill: false,
+      };
+
+      new Chart(barChartCanvas, {
+        type: "bar",
+        data: areaChartData,
+        options: barChartOptions,
+      });
+
+
+    var donutData        = {
+      
+      /*
+        labels: [
+      'Chrome',
+          'IE',
+          'FireFox'
+      ],
+      */
+      
+
+      labels: arrayNome,
+      
+      datasets: [
+        {
+          //data: [700,500,400],
+          data: qtdLavels,
+          backgroundColor : [
+            '#f56954',
+            '#00a65a',
+            '#f39c12',
+            '#00c0ef',
+            '#3c8dbc',
+            '#d2d6de',
+            '#7D3D3D',
+            '#908322',
+            '#629340',
+            '#159811',
+            '#52D781',
+            '#41C6BC',
+            '#2E71B4',
+            '#1D1DC1',
+            '#552FD0',
+            '#651AB0',
+            '#C519D4',
+            '#A71093',
+            '#ED028B',
+            '#E4033F',
+            '#E50812',
+            '#DE641D',
+            '#71896B',
+            '#6CAE88',
+            '#7B0498',
+            '#2B3277',
+            '#C412BE',
+
+          ],
+        }
+      ]
+    }
+
+
+
+          //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData        = donutData;
+    var pieOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: pieData,
+      options: pieOptions
+    })
+  }else{
+    $(displayGraficos).empty();
+    $(tabelaInstalacoes).empty();
+  }
+    });
+  </script>
+

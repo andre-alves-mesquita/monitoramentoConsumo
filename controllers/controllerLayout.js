@@ -7,7 +7,7 @@ require("dotenv").config(); //carregar configurações do dotenv
 
 module.exports = (app) => {
   app.get("/", async (req, res) => {
-    res.render("login");
+    res.render("login/login");
   });
 
   app.post("/", async (req, res) => {

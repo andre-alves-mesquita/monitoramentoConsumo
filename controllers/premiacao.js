@@ -4,7 +4,7 @@ const isAuth = require("../middlewares/auth");
 
 module.exports = (app) => {
   app.get("/premiacao", isAuth, async (req, res) => {
-    res.render("premiacao/premiacao", {
+    res.render("premiacao/index", {
       instalacoes: null,
       demonstrativoQuantitativoLabel: null,
       demonstrativoQuantitativoQtd: null,
@@ -17,7 +17,7 @@ module.exports = (app) => {
   app.post("/premiacao", isAuth, async (req, res) => {
     let dataInicio = req.body.dataInicioForm;
     let dataFim = req.body.dataFimForm;
-    let extra = req.body.extraForm;
+    //let extra = req.body.extraForm;
     let vendedor = req.body.selectVendedorForm;
     let usuario = req.body.selectUsuarioForm;
     let tecnico = req.body.selectTecnicoForm;
@@ -28,7 +28,7 @@ module.exports = (app) => {
     let queryUsuario = "";
     let queryTecnico = "";
     let queryResponsavel = "";
-    let queryExtra = "";
+    //let queryExtra = "";
     let queryFinal = "";
     let remuneracao = 0;
     let remuneracaoTotal = 0;
@@ -48,12 +48,14 @@ module.exports = (app) => {
       queryDataFim += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD') `;
     }
 
+    /*
     if (extra == "sim") {
       queryExtra += `and (select COUNT(at2.tag) as "Extra" from admcore_clientecontrato CC
       inner join admcore_clientecontrato_tags act on (act.clientecontrato_id = CC.id)
       inner join admcore_tag at2 on (at2.id = act.tag_id)
       where CC.id = ac.id and at2.tag = 'Extra') > 0 `;
     }
+    */
 
     if (vendedor) {
       const vendedorArray = vendedor.split(",");
@@ -94,7 +96,6 @@ module.exports = (app) => {
     queryFinal +=
       queryDataInicio +
       queryDataFim +
-      queryExtra +
       queryResponsavel +
       queryTecnico +
       queryVendedor +
@@ -150,10 +151,8 @@ module.exports = (app) => {
         vendedoresValorInstalacoes[index].toFixed(2)
       );
     }
-    console.log(valorVendasArredondado);
-    console.log(valorInstalacoesArredondado);
 
-    res.render("premiacao/premiacao", {
+    res.render("premiacao/index", {
       instalacoes: instalacoes.rows,
       demonstrativoQuantitativoLabel: vendedoresLabel,
       demonstrativoQuantitativoQtd: vendedoresQtdVendas,
