@@ -72,10 +72,52 @@ class Extra {
     });
   }
 
+  buscarFuncionarioNome(queryFunc) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `SELECT * FROM auth_user au 
+        WHERE au.is_active = true 
+        ${queryFunc} 
+
+        `;
+
+        conexaoPg.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          var funcionarios = JSON.parse(JSON.stringify(resultados));
+
+          resolve(funcionarios);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   buscarTodosExtras() {
     return new Promise((resolve, reject) => {
       try {
         const sql = `SELECT nome_usuario FROM extra`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          var funcionarios = JSON.parse(JSON.stringify(resultados));
+
+          resolve(funcionarios);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  atualizarExtras(usuarios) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `UPDATE extra SET extra = 'nao' WHERE ${usuarios} `;
 
         conexaoMs.query(sql, (erro, resultados) => {
           if (erro) {
