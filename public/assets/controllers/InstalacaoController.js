@@ -41,8 +41,6 @@ class InstalacaoController {
         dataInicioForm;
 
       document.querySelector('input[name="dataFimForm"]').value = dataFimForm;
-
-      document.querySelector('select[name="extraForm"]').value = extraForm;
     }
   }
 

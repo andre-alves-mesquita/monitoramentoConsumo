@@ -3,19 +3,29 @@ const Extra = require("../models/extra");
 
 module.exports = (app) => {
   app.get("/extra", isAuth, async (req, res) => {
-    let funcionarios = await Extra.buscarTodosFuncionarios();
-    let extras = await Extra.buscarTodosExtras();
+    let funcionarios = await Extra.buscarTodosFuncionarios(); //buscar todos funcionarios sgp
+    let extras = await Extra.buscarTodosExtras(); // busca todos os extras da tabela de promocao
     let listaNome = [];
     let listaDeExtras = [];
 
     extras.forEach((element) => {
-      if (!listaDeExtras.includes(element.nome_usuario)) {
+      if (
+        !listaDeExtras.includes(element.nome_usuario) &&
+        element.extra == "sim"
+      ) {
         listaDeExtras.push(element.nome_usuario);
+      }
+
+      if (element.extra == "nao" && !listaNome.includes(element.nome_usuario)) {
+        listaNome.push(element.nome_usuario);
       }
     });
 
     funcionarios.rows.forEach((element) => {
-      if (!listaDeExtras.includes(element.name)) {
+      if (
+        !listaDeExtras.includes(element.name) &&
+        !listaNome.includes(element.name)
+      ) {
         listaNome.push(element.name);
       }
     });
@@ -31,6 +41,7 @@ module.exports = (app) => {
     let queryPromocao = "";
     let promocaoRemover = req.body.comExtra;
     let queryPromocaoRemover = "";
+    let listaDeExtras = [];
 
     if (typeof promocao != "object" && typeof promocao != "undefined") {
       promocao = [promocao];
@@ -49,12 +60,19 @@ module.exports = (app) => {
 
     if (promocao != "") {
       promocao.forEach((element, index) => {
-        if (index + 1 == promocao.length) {
-          queryPromocao += ` (au.name = '${element}' and au.username NOT LIKE '%del%' ) `;
+        if (index + 1 == promocao.length && promocao.length > 1) {
+          console.log("entrou if");
+          queryPromocao += `  au.name = '${element}' and au.username NOT LIKE '%del%'  `;
         } else if (index + 1 == 1) {
-          queryPromocao += ` AND (au.name = '${element}' and au.username NOT LIKE '%del%' ) OR `;
+          console.log("entrou else if");
+          if (index + 1 == promocao.length) {
+            queryPromocao += ` AND  au.name = '${element}' and au.username NOT LIKE '%del%'`;
+          } else {
+            queryPromocao += ` AND  au.name = '${element}' and au.username NOT LIKE '%del%'  OR `;
+          }
         } else {
-          queryPromocao += ` (au.name = '${element}' and au.username NOT LIKE '%del%' ) OR `;
+          console.log("entrou else");
+          queryPromocao += `  au.name = '${element}' and au.username NOT LIKE '%del%'  OR `;
         }
       });
     } else {
@@ -63,46 +81,51 @@ module.exports = (app) => {
 
     let funcionarios = await Extra.buscarFuncionarioNome(queryPromocao);
 
-    funcionarios.rows.forEach((element) => {
-      Extra.cadastrarFuncionariosExtra({
-        id_usuario: element.id,
-        nome_usuario: element.name,
-        extra: "sim",
-      });
-    });
-
-    promocaoRemover.forEach((element, index) => {
-      if (index + 1 < promocaoRemover.length) {
-        queryPromocaoRemover += ` ( nome_usuario = '${element}' ) OR `;
-      } else {
-        queryPromocaoRemover += ` ( nome_usuario = '${element}' ) `;
-      }
-    });
-
-    let funcionariosAtualizados = await Extra.atualizarExtras(
-      queryPromocaoRemover
-    );
-
-    //let funcionarios = await Extra.cadastrarFuncionariosExtra();
-
-    /*
     let extras = await Extra.buscarTodosExtras();
-    let listaNome = [];
-    let listaDeExtras = [];
 
-    
     extras.forEach((element) => {
-      if (!listaDeExtras.includes(element.nome_usuario)) {
-        listaDeExtras.push(element.nome_usuario);
-      }
+      listaDeExtras.push(element.nome_usuario);
     });
 
-    funcionarios.rows.forEach((element) => {
-      if (!listaDeExtras.includes(element.name)) {
-        listaNome.push(element.name);
-      }
-    });
-    */
+    if (!queryPromocao == "") {
+      funcionarios.rows.forEach((element) => {
+        if (listaDeExtras.includes(element.name)) {
+          console.log("entrou aqui att");
+          Extra.removerFuncionariosExtra({ extra: "sim" }, element.id);
+        } else {
+          console.log("entrou aqui inserir");
+          Extra.cadastrarFuncionariosExtra({
+            id_usuario: element.id,
+            nome_usuario: element.name,
+            extra: "sim",
+          });
+        }
+      });
+    }
+
+    if (promocaoRemover != "") {
+      promocaoRemover.forEach((element, index) => {
+        if (index + 1 == promocaoRemover.length && promocaoRemover.length > 1) {
+          queryPromocaoRemover += `   nome_usuario = '${element}'   `;
+        } else if (index + 1 == 1) {
+          if (index + 1 == promocaoRemover.length) {
+            queryPromocaoRemover += `    nome_usuario = '${element}'  `;
+          } else {
+            queryPromocaoRemover += `   nome_usuario = '${element}'  OR `;
+          }
+        } else {
+          queryPromocaoRemover += ` nome_usuario = '${element}'  OR `;
+        }
+      });
+    } else {
+      queryPromocaoRemover = "";
+    }
+
+    if (!queryPromocaoRemover == "") {
+      let funcionariosAtualizados = await Extra.atualizarExtras(
+        queryPromocaoRemover
+      );
+    }
 
     res.redirect("/extra");
   });

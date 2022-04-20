@@ -80,7 +80,7 @@ class Usuarios {
           if (erro) {
             console.log(erro);
           }
-          console.log(resultados);
+
           resolve("cadastro atualizado com sucesso");
         });
       } catch (error) {

@@ -122,7 +122,6 @@ module.exports = (app) => {
   });
 
   app.get("/pegar-usuario", async (req, res) => {
-    console.log(req.session.id_usuario);
     let nome = await Sessao.pegarUsuarioLogado(req.session.id_usuario);
 
     res.status(200).json(nome);

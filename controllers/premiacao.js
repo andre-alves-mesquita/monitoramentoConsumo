@@ -11,6 +11,7 @@ module.exports = (app) => {
       vendedoresValorVendas: null,
       vendedoresValorInstalacoes: null,
       exibirJanelas: null,
+      remuneracaoTotal: null,
     });
   });
 
@@ -39,6 +40,7 @@ module.exports = (app) => {
     let vendedoresValorInstalacoes = [];
     let valorVendasArredondado = [];
     let valorInstalacoesArredondado = [];
+    let valorTotalPago = 0;
 
     if (dataInicio != "") {
       queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
@@ -121,6 +123,7 @@ module.exports = (app) => {
 
       element.remuneracaoTecnico = remuneracaoTecnico;
       element.remuneracaoTotal = remuneracaoTotal;
+      valorTotalPago += remuneracaoTecnico + remuneracaoTotal;
 
       if (vendedoresLabel.length == 0) {
         vendedoresLabel.push(element.Vendedor);
@@ -159,6 +162,7 @@ module.exports = (app) => {
       vendedoresValorVendas: valorVendasArredondado,
       vendedoresValorInstalacoes: valorInstalacoesArredondado,
       exibirJanelas: true,
+      remuneracaoTotal: valorTotalPago.toFixed(2),
     });
   });
 

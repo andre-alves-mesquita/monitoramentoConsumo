@@ -89,7 +89,7 @@
 <div class="content" id="graficos">
     <div class="content-fluid">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                <!-- BAR CHART -->
             <div class="card card-success">
                 <div class="card-header">
@@ -114,28 +114,7 @@
               <!-- /.card -->
         </div>
 
-        <div class="col-lg-6">
-           <!-- PIE CHART -->
-           <div class="card card-danger">
-            <div class="card-header">
-              <h3 class="card-title"> <i class="fas fa-chart-pie"></i> Demonstrativo geral</h3>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-     </div>
+  
     </div>
 </div>
 </div>
@@ -207,7 +186,7 @@
             <td>
                 
                 <% if( instalacoes[i].extra == '1' && instalacoes[i].remuneracaoTecnico == 0) { %>
-                        técnico: <% instalacoes[i].remuneracaoTotal %>
+                        Vendedor/técnico: <%= instalacoes[i].remuneracaoTotal %>
                     <% }else{ %>
                             Técnico: <%= instalacoes[i].remuneracaoTecnico %><br />
                             Vendedor: <%= instalacoes[i].remuneracaoTotal %>
@@ -219,28 +198,19 @@
         <% } %>
     <% } %>
 
-                                               
-                                                     
-
                                                 </tbody>
-                                           <!--
+                                          
                                                 <tfoot>
                                                     <tr class="text-center">
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
-                                                        <th>-</th>
+                                                        <th colspan="7"></th>
+                                                        
+                                                        <th>Valor a ser pago: R$ <%= remuneracaoTotal %></th>
+                                                        
                                                         
                                                     
                                                     </tr>
                                                 </tfoot>
-                                                -->
+                                                
                                             </table>
                                         </div>
                                         <!-- /.card-body -->
@@ -303,6 +273,7 @@ qtdLavels = qtdLavels.split(",")
           pointHighlightStroke: 'rgba(60,141,188,1)',
           data                : ArrayvendedoresValorVendas
         },
+        /*
         {
           label               : 'Valor em instalações',
           backgroundColor     : 'rgba(210, 214, 222, 1)',
@@ -313,7 +284,7 @@ qtdLavels = qtdLavels.split(",")
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
           data                : ArrayvendedoresValorInstalacoes
-        },
+        },*/
       ]
     }
       //-------------
