@@ -10,9 +10,8 @@ class InstalacaoController {
   preencherCamposFormulario() {
     let dataInicioForm = localStorage.getItem("dataInicioForm");
     let dataFimForm = localStorage.getItem("dataFimForm");
-    let extraForm = localStorage.getItem("extraForm");
 
-    if (dataInicioForm == null && dataFimForm == null && extraForm == null) {
+    if (dataInicioForm == null && dataFimForm == null) {
       let dataAtual = moment().format("DD-MM-YYYY");
       let arrayDataAtual = dataAtual.split("-");
 
@@ -91,13 +90,11 @@ class InstalacaoController {
   guardarInformacoesFormulario() {
     let dataInicioForm = $('input[name="dataInicioForm"]').val();
     let dataFimForm = $('input[name="dataFimForm"]').val();
-    let extraForm = $('select[name="extraForm"]').val();
 
     localStorage.clear();
 
     localStorage.setItem("dataInicioForm", dataInicioForm);
     localStorage.setItem("dataFimForm", dataFimForm);
-    localStorage.setItem("extraForm", extraForm);
   }
 
   /*

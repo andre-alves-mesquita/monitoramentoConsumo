@@ -4,6 +4,21 @@ const Extra = require("../models/extra");
 const Instalacoes = require("../models/instalacoes");
 
 module.exports = (app) => {
+  let meses = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+  ];
+
   app.get("/dashboard", isAuth, async (req, res) => {
     res.render("teste");
   });
@@ -27,21 +42,6 @@ module.exports = (app) => {
       ],
     });
 
-    let meses = [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro",
-    ];
-
     let mes = moment().format("MMMM");
     let ano = moment().format("YYYY");
 
@@ -49,9 +49,15 @@ module.exports = (app) => {
 
     res.render("dashboard-funcionario/index", {
       funcionarios: funcionarios.rows,
+      instalacoes: null,
       mes: mes,
       ano: ano,
+      extra: null,
       meses: meses,
+      funcionario: null,
+      vendedor: null,
+      qtd: null,
+      valor: null,
     });
   });
 
@@ -59,27 +65,64 @@ module.exports = (app) => {
     let funcionario = req.body.funcionario;
     let ano = req.body.ano;
     let mes = req.body.mes;
-
+    let remuneracaoTotal = 0;
+    let qtdDeVendas = 0;
+    let valorExtra = 0;
+    let valorTotalGanho = 0;
+    let queryFuncionario = "";
     let dataInicioMes = moment([ano, mes])
       .startOf("month")
       .format("YYYY-MM-DD");
 
     let dataFimMes = moment([ano, mes]).endOf("month").format("YYYY-MM-DD");
-
     let queryDataInicio = ` and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicioMes}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
-
     let queryDataFim = ` and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFimMes}') ,'YYYY-MM-DD'),'YYYY-MM-DD') `;
 
-    let queryFuncionario = ` and av.nome = '${funcionario}' `;
+    if (funcionario == "Edvania Santos Coutinho") {
+      queryFuncionario = ` and av.nome = 'Edvania santos coutinho' `;
+    } else {
+      queryFuncionario = ` and av.nome = '${funcionario}' `;
+    }
+
     let queryData = ` ${queryDataInicio} ${queryDataFim} `;
-
     let queryFinal = ` ${queryFuncionario} ${queryData} `;
-
-    console.log(queryFinal);
-
     let instalacoes = await Instalacoes.pegarInstalacoes(queryFinal);
 
-    res.status(200).json(instalacoes.rows);
+    instalacoes.rows.forEach((element) => {
+      remuneracao = Number(element.Preço) / 2;
+
+      if (element.extra == "1") {
+        if (element.Vendedor == element.Técnico_responsável) {
+          remuneracaoTotal = remuneracao + 50;
+          element.remuneracaoTotal = remuneracao + 50;
+          valorExtra += 50;
+        } else {
+          remuneracaoTotal = remuneracao;
+          element.remuneracaoTotal = remuneracao;
+        }
+      } else {
+        remuneracaoTotal = remuneracao;
+        element.remuneracaoTotal = remuneracao;
+      }
+
+      qtdDeVendas += 1;
+      valorTotalGanho += remuneracaoTotal;
+    });
+
+    let funcionarios = await Extra.buscarTodosFuncionarios(); //buscar todos funcionarios sgp
+
+    res.render("dashboard-funcionario/index", {
+      funcionarios: funcionarios.rows,
+      funcionario: funcionario,
+      instalacoes: instalacoes.rows,
+      vendedor: funcionario,
+      extra: valorExtra.toFixed(2),
+      mes: meses[mes],
+      ano: ano,
+      meses: meses,
+      qtd: qtdDeVendas,
+      valor: valorTotalGanho.toFixed(2),
+    });
   });
 
   app.get("/dashboard-valor-mes", isAuth, async (req, res) => {

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas2image@1.0.5/canvas2image.min.js"></script>
+  </head>
+  <script language="javascript">
+    (function ($) {
+      $.fn.createPdf = function (parametros) {
+        var config = {
+          fileName: "html-to-pdf",
+        };
+
+        if (parametros) {
+          $.extend(config, parametros);
+        }
+
+        var quotes = document.getElementById($(this).attr("id"));
+
+        html2canvas(quotes, {
+          onrendered: function (canvas) {
+            var pdf = new jsPDF("p", "pt", "letter");
+
+            for (var i = 0; i <= quotes.clientHeight / 980; i++) {
+              var srcImg = canvas;
+              var sX = 0;
+              var sY = 980 * i;
+              var sWidth = 900;
+              var sHeight = 980;
+              var dX = 0;
+              var dY = 0;
+              var dWidth = 900;
+              var dHeight = 980;
+
+              window.onePageCanvas = document.createElement("canvas");
+              onePageCanvas.setAttribute("width", 900);
+              onePageCanvas.setAttribute("height", 980);
+              var ctx = onePageCanvas.getContext("2d");
+              ctx.drawImage(
+                srcImg,
+                sX,
+                sY,
+                sWidth,
+                sHeight,
+                dX,
+                dY,
+                dWidth,
+                dHeight
+              );
+
+              var canvasDataURL = onePageCanvas.toDataURL("image/png", 1.0);
+              var width = onePageCanvas.width;
+              var height = onePageCanvas.clientHeight;
+
+              if (i > 0) {
+                pdf.addPage(612, 791);
+              }
+
+              pdf.setPage(i + 1);
+              pdf.addImage(
+                canvasDataURL,
+                "PNG",
+                20,
+                40,
+                width * 0.62,
+                height * 0.62
+              );
+            }
+
+            pdf.save(config.fileName);
+          },
+        });
+      };
+    })(jQuery);
+
+    function createPDF() {
+      $("#renderPDF").createPdf({
+        fileName: "testePDF",
+      });
+    }
+  </script>
+  <body>
+    <button type="button" class="btn btn-success" onclick="createPDF();">
+      pdf
+    </button>
+
+    <div id="renderPDF" class="container">
+      <div class="jumbotron">
+        <h1>Bootstrap Tutorial</h1>
+        <p>
+          Bootstrap is the most popular HTML, CSS, and JS framework for
+          developing responsive, mobile-first projects on the web.
+        </p>
+      </div>
+      <div id="customers">
+        <table id="tab_customers" class="table table-striped">
+          <thead>
+            <tr class="btn-danger">
+              <th>#</th>
+              <th>Population</th>
+              <th>Date</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>19</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>21</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>22</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>23</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>24</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>25</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>26</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>27</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>28</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>29</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>30</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>31</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>32</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>33</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>34</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>35</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>36</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>37</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>39</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>40</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>41</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>42</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>43</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>44</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>45</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>46</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>47</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>48</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>49</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>50</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>51</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>52</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>53</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>54</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>55</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+            <tr>
+              <td>56</td>
+              <td>1,363,480,000</td>
+              <td>March 24, 2014</td>
+              <td>19.1</td>
+            </tr>
+            <tr>
+              <td>57</td>
+              <td>1,241,900,000</td>
+              <td>March 24, 2014</td>
+              <td>17.4</td>
+            </tr>
+            <tr>
+              <td>58</td>
+              <td>317,746,000</td>
+              <td>March 24, 2014</td>
+              <td>4.44</td>
+            </tr>
+            <tr>
+              <td>59</td>
+              <td>249,866,000</td>
+              <td>July 1, 2013</td>
+              <td>3.49</td>
+            </tr>
+            <tr>
+              <td>60</td>
+              <td>201,032,714</td>
+              <td>July 1, 2013</td>
+              <td>2.81</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

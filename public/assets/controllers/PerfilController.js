@@ -1,8 +1,11 @@
 class PerfilController {
-  constructor() {}
+  constructor() {
+    localStorage.clear();
+  }
 
   atualizarDados() {
     $("#erro").empty();
+
     let login = $('input[name="Login"]').val();
     let email = $('input[name="email"]').val();
     let senha = $('input[name="senha"]').val();

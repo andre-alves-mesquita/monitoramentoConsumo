@@ -1,5 +1,7 @@
 class LoginController {
-  constructor() {}
+  constructor() {
+    localStorage.clear();
+  }
 
   exibirErroLogin() {
     const urlParams = new URLSearchParams(window.location.search);
