@@ -80,7 +80,20 @@ class Instalacoes {
     return new Promise((resolve, reject) => {
       try {
         const sql = `
-        select distinct name from auth_user where is_active = true 
+        select distinct name from auth_user au where au.is_active = true  and
+        au.name != 'Suporte Local' and
+        au.name != 'Protestar' and
+        au.name != 'Retirar' and
+        au.name != 'Eqp removido pra cancelamento' and
+        au.name != 'S.Financeiro' and
+        au.name != 'Instalar' and
+        au.name != 'Setor Comercial' and
+        au.name != 'Atendimentos de Prevenção' and
+        au.name != 'Aguardando Splintagem/Poste/Expansão' and
+        au.name != 'Suporte Remoto' and
+        au.name != 'Contratos Pendentes' and
+        au.name != 'Jeniffer Gabriele' and
+        au.name != ''
         `;
 
         conexaoPg.query(sql, (erro, resultados) => {
@@ -101,7 +114,7 @@ class Instalacoes {
     return new Promise((resolve, reject) => {
       try {
         const sql = `
-        select distinct nome from admcore_vendedor av where av.ativo = true
+        select distinct nome from admcore_vendedor av where av.ativo = true and av.nome != 'Migração'
         `;
 
         conexaoPg.query(sql, (erro, resultados) => {

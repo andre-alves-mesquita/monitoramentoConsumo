@@ -69,7 +69,7 @@ class DashboardFuncionarioController {
     };
 
     $("#renderPDF").createPdf({
-      fileName: "testePDF",
+      fileName: tituloPdf,
     });
   }
 }

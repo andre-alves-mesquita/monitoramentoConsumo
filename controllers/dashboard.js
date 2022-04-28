@@ -19,7 +19,7 @@ module.exports = (app) => {
     "Dezembro",
   ];
 
-  app.get("/dashboard", isAuth, async (req, res) => {
+  app.get("/dashboards", isAuth, async (req, res) => {
     res.render("teste");
   });
 
@@ -55,9 +55,11 @@ module.exports = (app) => {
       extra: null,
       meses: meses,
       funcionario: null,
+      qtdExtra: null,
       vendedor: null,
       qtd: null,
       valor: null,
+      exibirJanelas: null,
     });
   });
 
@@ -67,6 +69,7 @@ module.exports = (app) => {
     let mes = req.body.mes;
     let remuneracaoTotal = 0;
     let qtdDeVendas = 0;
+    let qtdExtra = 0;
     let valorExtra = 0;
     let valorTotalGanho = 0;
     let queryFuncionario = "";
@@ -96,6 +99,7 @@ module.exports = (app) => {
           remuneracaoTotal = remuneracao + 50;
           element.remuneracaoTotal = remuneracao + 50;
           valorExtra += 50;
+          qtdExtra += 1;
         } else {
           remuneracaoTotal = remuneracao;
           element.remuneracaoTotal = remuneracao;
@@ -116,12 +120,14 @@ module.exports = (app) => {
       funcionario: funcionario,
       instalacoes: instalacoes.rows,
       vendedor: funcionario,
+      qtdExtra: qtdExtra,
       extra: valorExtra.toFixed(2),
       mes: meses[mes],
       ano: ano,
       meses: meses,
       qtd: qtdDeVendas,
       valor: valorTotalGanho.toFixed(2),
+      exibirJanelas: true,
     });
   });
 

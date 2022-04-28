@@ -60,37 +60,103 @@ module.exports = (app) => {
     */
 
     if (vendedor) {
-      const vendedorArray = vendedor.split(",");
-      vendedorArray.forEach((element) => {
-        queryVendedor += ` and av.nome = '${element}' `;
-      });
+      queryVendedor += " and ( ";
+      if (typeof vendedor == "string") {
+        const vendedorArray = vendedor.split(",");
+        vendedorArray.forEach((element, index) => {
+          if (index == 0) {
+            queryVendedor += ` av.nome = '${element}' `;
+          } else {
+            queryVendedor += ` or av.nome = '${element}' `;
+          }
+        });
+      } else {
+        vendedor.forEach((element, index) => {
+          if (index == 0) {
+            queryVendedor += ` av.nome = '${element}' `;
+          } else {
+            queryVendedor += ` or av.nome = '${element}' `;
+          }
+        });
+      }
+      queryVendedor += " ) ";
     } else {
       queryVendedor = "";
     }
+    // =======================================================================
 
+    /*
     if (usuario) {
-      const usuarioArray = usuario.split(",");
-      usuarioArray.forEach((element) => {
-        queryUsuario += ` and au.name = '${element}' `;
-      });
+      queryUsuario += " and ( ";
+      if (typeof usuario == "string") {
+        const usuarioArray = usuario.split(",");
+        usuarioArray.forEach((element, index) => {
+          if (index == 0) {
+            queryUsuario += ` av.nome = '${element}' `;
+          } else {
+            queryUsuario += ` or av.nome = '${element}' `;
+          }
+        });
+      } else {
+        usuario.forEach((element, index) => {
+          if (index == 0) {
+            queryUsuario += ` av.nome = '${element}' `;
+          } else {
+            queryUsuario += ` or av.nome = '${element}' `;
+          }
+        });
+      }
+      queryUsuario += " ) ";
     } else {
       queryUsuario = "";
-    }
+    }*/
 
     if (tecnico) {
-      const tecnicoArray = tecnico.split(",");
-      tecnicoArray.forEach((element) => {
-        queryTecnico += ` and au2.name = '${element}' `;
-      });
+      queryTecnico += " and ( ";
+      if (typeof tecnico == "string") {
+        const tecnicoArray = tecnico.split(",");
+        tecnicoArray.forEach((element, index) => {
+          if (index == 0) {
+            queryTecnico += ` au2.name = '${element}' `;
+          } else {
+            queryTecnico += ` or au2.name = '${element}' `;
+          }
+        });
+      } else {
+        tecnico.forEach((element, index) => {
+          if (index == 0) {
+            queryTecnico += ` au2.name = '${element}' `;
+          } else {
+            queryTecnico += ` or au2.name = '${element}' `;
+          }
+        });
+      }
+      queryTecnico += " ) ";
     } else {
       queryTecnico = "";
     }
 
     if (responsavel) {
-      const responsavelArray = responsavel.split(",");
-      responsavelArray.forEach((element) => {
-        queryResponsavel += ` and au3.name = '${element}' `;
-      });
+      queryResponsavel += " and ( ";
+      if (typeof responsavel == "string") {
+        const responsavelArray = responsavel.split(",");
+        responsavelArray.forEach((element, index) => {
+          if (index == 0) {
+            queryResponsavel += ` au3.name = '${element}' `;
+          } else {
+            queryResponsavel += ` or au3.name = '${element}' `;
+          }
+        });
+      } else {
+        responsavel.forEach((element, index) => {
+          if (index == 0) {
+            queryResponsavel += ` au3.name = '${element}' `;
+          } else {
+            queryResponsavel += ` or au3.name = '${element}' `;
+          }
+        });
+      }
+      queryResponsavel += " ) ";
     } else {
       queryResponsavel = "";
     }
@@ -154,6 +220,8 @@ module.exports = (app) => {
         vendedoresValorInstalacoes[index].toFixed(2)
       );
     }
+
+    console.log(instalacoes.rows);
 
     res.render("premiacao/index", {
       instalacoes: instalacoes.rows,
