@@ -6,6 +6,8 @@ class Tabelas {
     this.criarTabelaUsuarios();
     this.criarTabelaUsuarioLogado();
     this.criarTabelaPromocaoExtra();
+    this.criarTabelaPermissoes();
+    this.criarTabelaUsuarioPermissoes();
   }
 
   criarTabelaConsumoInternet() {
@@ -97,6 +99,41 @@ class Tabelas {
         console.log(erro);
       } else {
         console.log("Tabela extra criada com sucesso");
+      }
+    });
+  }
+
+  criarTabelaUsuarioPermissoes() {
+    const sql = `
+      CREATE TABLE IF NOT EXISTS usuario_permissoes(
+        id int NOT NULL AUTO_INCREMENT,
+        id_usuario int,        
+        id_permissao int,
+        PRIMARY KEY(id) 
+      )
+      `;
+    this.conexao.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        console.log("Tabela usuario_permissoes criada com sucesso");
+      }
+    });
+  }
+
+  criarTabelaPermissoes() {
+    const sql = `
+      CREATE TABLE IF NOT EXISTS permissoes(
+        id int NOT NULL AUTO_INCREMENT,
+        permissao varchar(50),        
+        PRIMARY KEY(id) 
+      )
+      `;
+    this.conexao.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        console.log("Tabela permissoes criada com sucesso");
       }
     });
   }

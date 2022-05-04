@@ -44,6 +44,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/perfil", express.static(path.join(__dirname, "public")));
+app.use("/perfil/edit", express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 consign().include("controllers").into(app);
 

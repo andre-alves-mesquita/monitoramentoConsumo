@@ -11,4 +11,10 @@ module.exports = (app) => {
 
     res.render("perfil/index", { usuario: usuario[0] });
   });
+
+  app.get("/perfil/edit/:id", isAuth, async (req, res) => {
+    let usuario = await Usuario.buscarUsuario(req.params.id);
+
+    res.render("perfil/index", { usuario: usuario[0] });
+  });
 };

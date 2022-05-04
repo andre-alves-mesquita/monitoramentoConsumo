@@ -1,5 +1,5 @@
 class perfilAjax {
-  static atualizarUsuario(ip_servidor, login, email, senha) {
+  static atualizarUsuario(ip_servidor, id, login, email, senha) {
     let resposta = null;
     var settings = {
       url: `${ip_servidor}/atualizar-perfil`,
@@ -10,6 +10,7 @@ class perfilAjax {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       data: {
+        id: id,
         login: login,
         email: email,
         senha: senha,

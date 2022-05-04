@@ -26,10 +26,10 @@
                                         <select class="form-control mr-3" id="exampleFormControlSelect1" name="funcionario">
                                             <% for(var i=0; i < funcionarios.length; i++) { %>
                                              
-                                                <% if(funcionarios[i].name == funcionario){ %>
-                                                    <option value="<%= funcionarios[i].name %>" selected><%= funcionarios[i].name %></option>
+                                                <% if(funcionarios[i].nome == funcionario){ %>
+                                                    <option value="<%= funcionarios[i].nome %>" selected><%= funcionarios[i].nome %></option>
                                                     <% }else{ %>
-                                                        <option value="<%= funcionarios[i].name %>"><%= funcionarios[i].name %></option>
+                                                        <option value="<%= funcionarios[i].nome %>"><%= funcionarios[i].nome %></option>
                                                         <% } %>
                                                 <% } %>
                                         </select>

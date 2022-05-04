@@ -70,7 +70,6 @@
    
     </div>
 </div>
-
                                               <button type="submit" class="btn btn-success mr-2" onclick="instalacaoController.guardarInformacoesFormulario()">Pesquisar</button>
                                               <button type="button" class="btn btn-secondary" onclick="instalacaoController.limparCampos()">Limpar</button>
                                             </form>
@@ -113,13 +112,9 @@
               </div>
               <!-- /.card -->
         </div>
-
-  
     </div>
 </div>
 </div>
-
-
         
     <div class="content" id="tabelaInstalacoes">
         <div class="content-fluid">
@@ -185,12 +180,9 @@
             </td>
             <td>
                 
-                <% if( instalacoes[i].extra == '1' && instalacoes[i].remuneracaoTecnico == 0) { %>
-                        Vendedor/técnico: <%= instalacoes[i].remuneracaoTotal %>
-                    <% }else{ %>
-                            Técnico: <%= instalacoes[i].remuneracaoTecnico %><br />
-                            Vendedor: <%= instalacoes[i].remuneracaoTotal %>
-                        <% } %>
+              
+                            <%= instalacoes[i].remuneracaoTotal %>
+                     
                 
             </td>
 
@@ -230,21 +222,13 @@
     let instalacaoController = new InstalacaoController();
   </script>
 
-
-
 <script>
-
 
     $(function () {
 
       exibirJanelas = "<%= exibirJanelas %>";
       let displayGraficos = document.querySelector("#graficos");
       let tabelaInstalacoes = document.querySelector("#tabelaInstalacoes");
-
-      
-
-   
-
 
       if(exibirJanelas){
 
@@ -386,7 +370,7 @@ qtdLavels = qtdLavels.split(",")
   }
     });
   </script>
-  <script>
+<script>
 
     $(function () {
         $("#example1").DataTable({
@@ -403,5 +387,5 @@ qtdLavels = qtdLavels.split(",")
             "responsive": true,
         });
     });
-  </script>
+</script>
 

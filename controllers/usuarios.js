@@ -4,7 +4,10 @@ const Usuario = require("../models/usuarios");
 
 module.exports = (app) => {
   app.get("/usuarios", isAuth, async (req, res) => {
+    let usuarios = await Usuario.buscarTodosUsuarios();
+
     res.render("usuarios/index", {
+      usuarios: usuarios,
       vazio: null,
       senhasDif: null,
       usuario: null,
@@ -19,6 +22,7 @@ module.exports = (app) => {
     let arrayInfo = [login, email, senha, confSenha];
     let senhasDif = false;
     let vazio = false;
+    let usuarios = await Usuario.buscarTodosUsuarios();
 
     arrayInfo.forEach((element) => {
       if (element == "" || element == null) {
@@ -32,17 +36,38 @@ module.exports = (app) => {
 
     if (vazio == true || senhasDif == true) {
       res.render("usuarios/index", {
+        usuarios: usuarios,
         vazio: vazio,
         senhasDif: senhasDif,
         usuario: false,
       });
     } else {
-      //inserir no banco dar resposta na tela
+      let result = await Usuario.cadastrarUsuario({
+        login: login,
+        email: email,
+        senha: senha,
+      });
+
+      let usuarios = await Usuario.buscarTodosUsuarios();
+
       res.render("usuarios/index", {
+        usuarios: usuarios,
         vazio: vazio,
         senhasDif: senhasDif,
         usuario: true,
       });
     }
+  });
+
+  app.get("/usuarios-excluir/:id", isAuth, async (req, res) => {
+    console.log(req.session.id_usuario);
+
+    if (req.session.id_usuario != req.params.id) {
+      let usuarios = await Usuario.excluirUsuario(req.params.id);
+    } else {
+      //enviar mensagem de erro
+    }
+
+    res.redirect("/usuarios");
   });
 };

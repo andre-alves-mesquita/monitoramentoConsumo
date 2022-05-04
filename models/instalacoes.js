@@ -34,6 +34,10 @@ class Instalacoes {
         where av.ativo = true
         and ap2.descricao != 'Clientes Cancelados'  and ap2.descricao != 'RadNet-Colaborador'   
         and ao.motivoos_id = 1
+        and (select COUNT(at2.tag) as "Base WSE" from admcore_clientecontrato CC
+      	inner join admcore_clientecontrato_tags act on (act.clientecontrato_id = CC.id)
+      	inner join admcore_tag at2 on (at2.id = act.tag_id)
+      	where CC.id = ac.id and at2.tag = 'Base WSE') = 0 
         ${queryFinal}   
         `;
 
@@ -94,6 +98,7 @@ class Instalacoes {
         au.name != 'Contratos Pendentes' and
         au.name != 'Jeniffer Gabriele' and
         au.name != ''
+        order by  au.name ASC 
         `;
 
         conexaoPg.query(sql, (erro, resultados) => {
@@ -114,7 +119,7 @@ class Instalacoes {
     return new Promise((resolve, reject) => {
       try {
         const sql = `
-        select distinct nome from admcore_vendedor av where av.ativo = true and av.nome != 'Migração'
+        select distinct nome from admcore_vendedor av where av.ativo = true and av.nome != 'Migração' order by nome ASC 
         `;
 
         conexaoPg.query(sql, (erro, resultados) => {

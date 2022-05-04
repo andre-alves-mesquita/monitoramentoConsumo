@@ -25,20 +25,20 @@
     <div class="col-4">
         <div class="input mb-3">
             <span class="input-text" id="basic-addon1">Login</span>
-            <input type="text" class="form-control" placeholder="login (sem espaço)" aria-label="Username" aria-describedby="basic-addon1" name="login">
+            <input type="text" class="form-control" placeholder="login (sem espaço)" aria-label="Username" aria-describedby="basic-addon1" name="login" required>
           </div>
     </div>
     <div class="col-4">
         <div class="input mb-3">
             <span class="input-text" id="basic-addon1">E-mail</span>
-            <input type="text" class="form-control" placeholder="exemplo@exemplo.com.br" aria-label="Username" aria-describedby="basic-addon1" name="email">
+            <input type="email" class="form-control" placeholder="exemplo@exemplo.com.br" aria-label="Username" aria-describedby="basic-addon1" name="email" required>
           </div>
     </div>
     <div class="col-2">
         
             <div class="input mb-3">
                 <span class="input-text" id="basic-addon1">Nova Senha</span>
-                <input type="password" class="form-control" placeholder="Senha" aria-label="Username" aria-describedby="basic-addon1" name="senha" >
+                <input type="password" class="form-control" placeholder="Senha" aria-label="Username" aria-describedby="basic-addon1" name="senha" required>
               </div>
         
         
@@ -48,7 +48,7 @@
         
             <div class="input mb-3">
                 <span class="input-text" id="basic-addon1">Confirmar Nova Senha</span>
-                <input type="password" class="form-control" placeholder="Senha" aria-label="Username" aria-describedby="basic-addon1" name="confSenha">
+                <input type="password" class="form-control" placeholder="Senha" aria-label="Username" aria-describedby="basic-addon1" name="confSenha" required>
               </div>
         
         
@@ -74,7 +74,60 @@
                                                     
                                         <!-- /.card-body -->
                             </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-dark">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-user"></i></span>   Listagem de usuários</strong></h4>
                         </div>
+                        <div class="card-body">
+                     
+                            <div class="row">
+                                <div class="col-12">
+                                   
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+ 
+                                            <table id="example1" class="table table-bordered table-hover">
+                                                <thead class="bg-info">
+                                                    <tr class="text-center">
+
+                                                        <th>Id</th>
+                                                        <th>Login</th>
+                                                        <th>Email</th>
+                                                        <th>Ações</th>
+                                                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyTable">
+                                                <% if(usuarios){ %>
+                                                    <% for(var i=0; i < usuarios.length; i++) { %>
+                                                <tr class="text-center">
+                                                    <td> <%= usuarios[i].id %></td>
+                                                    <td><%= usuarios[i].login %></td>
+                                                    <td><%= usuarios[i].email %></td>
+                                                    <td>
+                                                      <a href="perfil/edit/<%= usuarios[i].id %>"><button type="button" class="btn btn-sm btn-success m-2"><i class="fas fa-edit"></i> </button> </a>
+                                                      <a href="/usuarios-excluir/<%= usuarios[i].id %>"><button type="button" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> </button>   </a>
+                                                        
+                                                    </td>
+                                                </tr>
+                                                    <% } %>
+                                                <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- /.card-body -->
+                            </div>
+                        </div>   
                     </div>
                 </div>
             </div>

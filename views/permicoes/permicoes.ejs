@@ -1,0 +1,200 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <div class="content-header">
+
+  </div>
+
+  <div class="content">
+      <div class="content-fluid">
+          <div class="row">
+              <div class="col-lg-6">
+                  <div class="card">
+                      <div class="card-header bg-dark">
+                          <h4 class="m-0 ms-3"><strong>   <i class="fas fa-folder-plus"></i></span> Cadastrar permissão</strong></h4>
+                      </div>
+                      <div class="card-body">
+                        <form action="/permicoes-cadastrar" method="post">
+                        <div class="row">
+                        
+                          <div class="col-12">
+                            <div class="input mb-3">
+                        
+                                <span class="input-text" id="basic-addon1">Permissão</span>
+                                <input type="text" class="form-control" placeholder="Use os nomes do menu" aria-label="Username" aria-describedby="basic-addon1" name="permissao" required>
+                              </div>
+                            
+                        </div>
+               
+                        </div>
+                        <div class="row">
+                          <div class="col-3">
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                          </div>
+                        </div>
+                      </form>
+                      </div>
+                      <!-- /.card-body -->
+                  </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <h4 class="m-0 ms-3"><strong>   <i class="fas fa-user-plus"></i></span> Adicionar permissão</strong></h4>
+                    </div>
+                    <div class="card-body">
+                      <form action="/permicoes-adicionar-permissao" method="post">
+                      <div class="row">
+                        <div class="col-8">
+                          <span>Funcionário</span>
+                          <div class="mb-3 d-flex justify-content-between">
+                              <select class="form-control mr-3" id="exampleFormControlSelect1" name="funcionario">
+                                <% if(usuarios){ %>
+                                  <% for(var i=0; i < usuarios.length; i++) { %>
+                                          <option value="<%= usuarios[i].id %>" selected><%= usuarios[i].login %></option>
+                                          <% } %>
+                                          <% } %>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-4">
+                        <span>Permissão</span>
+                        <div class="mb-3 d-flex justify-content-between">
+                            <select class="form-control mr-3" id="exampleFormControlSelect1" name="permissao">
+                              <% if(permissoes){ %>
+                                <% for(var i=0; i < permissoes.length; i++) { %>
+                                        <option value="<%= permissoes[i].id %>" selected><%= permissoes[i].permissao %></option>
+                                        <% } %>
+                                        <% } %>
+                            </select>
+                        </div>
+                    </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                      
+                      </div>
+                    </form>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <h4 class="m-0 ms-3"><strong>   <i class="fas fa-user-lock"></i></span> Permições</strong></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                      
+                          <table id="example1" class="table table-bordered table-hover">
+                            <thead class="bg-info">
+                                <tr class="text-center">
+
+                                    <th>Id</th>
+                                    <th>Login</th>
+                                    <th>Email</th>
+                                    <th>Permições</th>
+                                    <th>Remover permissoes</th>
+                                 
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTable">
+                              <% if(usuarios){ %>
+                                <% for(var i=0; i < usuarios.length; i++) { %>
+                            <tr class="text-center">
+                              <td> <%= usuarios[i].id %></td>
+                              <td><%= usuarios[i].login %></td>
+                              <td><%= usuarios[i].email %></td>
+
+                           
+                                <td> 
+                                  <% if(usuarios[i].permissoes){ %>
+                                    <% for(var j=0; j < usuarios[i].permissoes.length; j++) { %>
+                                  <button class="btn btn-success">   <%= usuarios[i].permissoes[j] %></button>
+                               
+                                  <% } %>
+                                  <% } %>
+                                </td>
+                             
+                                <td>
+                                  <button type="button" class="btn btn-sm btn-danger m-2" data-toggle="modal" data-target="#exampleModal" onclick="permissoesController.carregarUsuario('<%= usuarios[i].id %>')"><i class="fas fa-edit"></i> </button>
+                                </td>
+                            </tr>
+                            <% } %>
+                            <% } %>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+
+          <div class="col-2">
+            <div class="input mb-3">
+                        
+              <span class="input-text" id="basic-addon1">id</span>
+              <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" value="" disabled>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="input mb-3">
+                        
+              <span class="input-text" id="basic-addon1">login</span>
+              <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" value="" disabled>
+            </div>
+          </div>
+          <div class="col-6">
+            <span>Permissoes</span>
+            <select class="form-control mr-3" id="exampleFormControlSelect1" name="permissao">
+              <% if(permissoes){ %>
+                <% for(var i=0; i < permissoes.length; i++) { %>
+                        <option value="<%= permissoes[i].id %>" selected><%= permissoes[i].permissao %></option>
+                        <% } %>
+                        <% } %>
+            </select>
+          </div>
+
+     
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Atualizar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/config/config.js"></script>
+<!--<script src="assets/controllers/Ajax/perfilAjax.js"></script>-->
+<script src="assets/controllers/PermissoesController.js"></script>
+<script>
+    let permissoesController = new PermissoesController();
+</script>

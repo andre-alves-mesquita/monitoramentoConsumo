@@ -45,7 +45,7 @@ module.exports = (app) => {
     let mes = moment().format("MMMM");
     let ano = moment().format("YYYY");
 
-    let funcionarios = await Extra.buscarTodosFuncionarios(); //buscar todos funcionarios sgp
+    let funcionarios = await Instalacoes.pegarVendedores(); //buscar todos funcionarios sgp
 
     res.render("dashboard-funcionario/index", {
       funcionarios: funcionarios.rows,
@@ -113,7 +113,7 @@ module.exports = (app) => {
       valorTotalGanho += remuneracaoTotal;
     });
 
-    let funcionarios = await Extra.buscarTodosFuncionarios(); //buscar todos funcionarios sgp
+    let funcionarios = await Instalacoes.pegarVendedores(); //buscar todos funcionarios sgp
 
     res.render("dashboard-funcionario/index", {
       funcionarios: funcionarios.rows,

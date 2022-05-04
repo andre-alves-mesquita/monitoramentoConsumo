@@ -61,17 +61,14 @@ module.exports = (app) => {
     if (promocao != "") {
       promocao.forEach((element, index) => {
         if (index + 1 == promocao.length && promocao.length > 1) {
-          console.log("entrou if");
           queryPromocao += `  au.name = '${element}' and au.username NOT LIKE '%del%'  `;
         } else if (index + 1 == 1) {
-          console.log("entrou else if");
           if (index + 1 == promocao.length) {
             queryPromocao += ` AND  au.name = '${element}' and au.username NOT LIKE '%del%'`;
           } else {
             queryPromocao += ` AND  au.name = '${element}' and au.username NOT LIKE '%del%'  OR `;
           }
         } else {
-          console.log("entrou else");
           queryPromocao += `  au.name = '${element}' and au.username NOT LIKE '%del%'  OR `;
         }
       });

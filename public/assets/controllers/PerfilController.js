@@ -6,6 +6,7 @@ class PerfilController {
   atualizarDados() {
     $("#erro").empty();
 
+    let id = $('input[name="id"]').val();
     let login = $('input[name="Login"]').val();
     let email = $('input[name="email"]').val();
     let senha = $('input[name="senha"]').val();
@@ -37,6 +38,7 @@ class PerfilController {
     } else {
       let resposta = perfilAjax.atualizarUsuario(
         ip_servidor,
+        id,
         login,
         email,
         senha

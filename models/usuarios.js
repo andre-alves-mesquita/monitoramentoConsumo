@@ -106,6 +106,41 @@ class Usuarios {
       }
     });
   }
+
+  buscarTodosUsuarios() {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `SELECT * FROM usuarios`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          var usuario = JSON.parse(JSON.stringify(resultados));
+          resolve(usuario);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  excluirUsuario(id) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `DELETE FROM usuarios WHERE id='${id}'`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          resolve(resultados);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 module.exports = new Usuarios();
