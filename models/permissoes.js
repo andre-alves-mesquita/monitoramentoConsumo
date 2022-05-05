@@ -72,6 +72,41 @@ class Permissoes {
       }
     });
   }
+
+  buscarTodasPermissoesUsuariosId(id) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `SELECT * FROM usuario_permissoes WHERE id_usuario=${id}`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          var permissoes = JSON.parse(JSON.stringify(resultados));
+          resolve(permissoes);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  removerPermissaoUsuario(idUsuario, idPermissao) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `DELETE FROM usuario_permissoes WHERE id_usuario=${idUsuario} AND id_permissao=${idPermissao}`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          resolve(resultados);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 module.exports = new Permissoes();

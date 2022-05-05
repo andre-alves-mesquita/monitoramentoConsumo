@@ -10,13 +10,13 @@
               <div class="col-lg-6">
                   <div class="card">
                       <div class="card-header bg-dark">
-                          <h4 class="m-0 ms-3"><strong>   <i class="fas fa-folder-plus"></i></span> Cadastrar permissão</strong></h4>
+                          <h4 class="m-0 ms-3"><strong>   <i class="fas fa-folder-plus"></i> Cadastrar permissão</strong></h4>
                       </div>
                       <div class="card-body">
                         <form action="/permicoes-cadastrar" method="post">
                         <div class="row">
                         
-                          <div class="col-12">
+                          <div class="col-6">
                             <div class="input mb-3">
                         
                                 <span class="input-text" id="basic-addon1">Permissão</span>
@@ -24,6 +24,15 @@
                               </div>
                             
                         </div>
+
+                        <div class="col-6">
+                          <div class="input mb-3">
+                      
+                              <span class="input-text" id="basic-addon1">Rota</span>
+                              <input type="text" class="form-control" placeholder="/exemplo" aria-label="Username" aria-describedby="basic-addon1" name="rota" required>
+                            </div>
+                          
+                      </div>
                
                         </div>
                         <div class="row">
@@ -145,11 +154,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Remover permissoes</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form action="/remover-permissao" method="post">
       <div class="modal-body">
         <div class="row">
 
@@ -157,7 +167,8 @@
             <div class="input mb-3">
                         
               <span class="input-text" id="basic-addon1">id</span>
-              <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" value="" disabled>
+              <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" name="idModal" disabled>
+              <input type="hidden" id="hiddenId" name="hiddenId">
             </div>
           </div>
 
@@ -165,17 +176,13 @@
             <div class="input mb-3">
                         
               <span class="input-text" id="basic-addon1">login</span>
-              <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" value="" disabled>
+              <input type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" name="loginModal" disabled>
             </div>
           </div>
           <div class="col-6">
             <span>Permissoes</span>
-            <select class="form-control mr-3" id="exampleFormControlSelect1" name="permissao">
-              <% if(permissoes){ %>
-                <% for(var i=0; i < permissoes.length; i++) { %>
-                        <option value="<%= permissoes[i].id %>" selected><%= permissoes[i].permissao %></option>
-                        <% } %>
-                        <% } %>
+            <select class="custom-select" multiple aria-label="multiple select example" size="6" name="selectResponsavelForm" id="selectResponsavelForm" required>
+      
             </select>
           </div>
 
@@ -184,16 +191,18 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Atualizar</button>
+        <button type="submit" class="btn btn-primary">Atualizar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         
       </div>
+    </form>
     </div>
   </div>
 </div>
 
 <script src="assets/config/config.js"></script>
-<!--<script src="assets/controllers/Ajax/perfilAjax.js"></script>-->
+<script src="assets/controllers/Ajax/permissoesAjax.js"></script>
+<script src="assets/controllers/Ajax/usuariosAjax.js"></script>
 <script src="assets/controllers/PermissoesController.js"></script>
 <script>
     let permissoesController = new PermissoesController();

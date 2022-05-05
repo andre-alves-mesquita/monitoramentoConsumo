@@ -125,7 +125,8 @@ class Tabelas {
     const sql = `
       CREATE TABLE IF NOT EXISTS permissoes(
         id int NOT NULL AUTO_INCREMENT,
-        permissao varchar(50),        
+        permissao varchar(50),      
+        rota varchar(100),    
         PRIMARY KEY(id) 
       )
       `;

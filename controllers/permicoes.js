@@ -1,9 +1,10 @@
 const isAuth = require("../middlewares/auth");
+const Permission = require("../middlewares/permission");
 const Usuario = require("../models/usuarios");
 const Permissoes = require("../models/permissoes");
 
 module.exports = (app) => {
-  app.get("/permicoes", isAuth, async (req, res) => {
+  app.get("/permicoes", isAuth, Permission, async (req, res) => {
     let usuarios = await Usuario.buscarTodosUsuarios();
     let permissoes = await Permissoes.buscarTodasPermissoes();
     let usuario_permissoes = await Permissoes.buscarTodasPermissoesUsuarios();
@@ -29,7 +30,11 @@ module.exports = (app) => {
 
   app.post("/permicoes-cadastrar", isAuth, async (req, res) => {
     let permissao = req.body.permissao;
-    let resposta = await Permissoes.InserirPermissao({ permissao: permissao });
+    let rota = req.body.rota;
+    let resposta = await Permissoes.InserirPermissao({
+      permissao: permissao,
+      rota: rota,
+    });
     let usuarios = await Usuario.buscarTodosUsuarios();
     let permissoes = await Permissoes.buscarTodasPermissoes();
 
@@ -46,6 +51,25 @@ module.exports = (app) => {
       id_usuario: id_usuario,
       id_permissao: id_permissao,
     });
+
+    res.redirect("/permicoes");
+  });
+
+  app.post("/remover-permissao", isAuth, async (req, res) => {
+    let idUsuario = req.body.hiddenId;
+    let loginModal = req.body.loginModal;
+    let permissoes = req.body.selectResponsavelForm;
+
+    if (typeof permissoes == "string") {
+      let resposta = await Permissoes.removerPermissaoUsuario(
+        idUsuario,
+        permissoes
+      );
+    } else {
+      permissoes.forEach((element) => {
+        let resposta = Permissoes.removerPermissaoUsuario(idUsuario, element);
+      });
+    }
 
     res.redirect("/permicoes");
   });
