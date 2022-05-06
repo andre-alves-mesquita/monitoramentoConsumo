@@ -1,8 +1,9 @@
 const isAuth = require("../middlewares/auth");
 const Extra = require("../models/extra");
+const Permission = require("../middlewares/permission");
 
 module.exports = (app) => {
-  app.get("/extra", isAuth, async (req, res) => {
+  app.get("/extra", isAuth, Permission, async (req, res) => {
     let funcionarios = await Extra.buscarTodosFuncionarios(); //buscar todos funcionarios sgp
     let extras = await Extra.buscarTodosExtras(); // busca todos os extras da tabela de promocao
     let listaNome = [];

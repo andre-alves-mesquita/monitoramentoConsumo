@@ -2,6 +2,7 @@ const isAuth = require("../middlewares/auth");
 const moment = require("moment"); // require
 const Extra = require("../models/extra");
 const Instalacoes = require("../models/instalacoes");
+const Permission = require("../middlewares/permission");
 
 module.exports = (app) => {
   let meses = [
@@ -19,11 +20,53 @@ module.exports = (app) => {
     "Dezembro",
   ];
 
-  app.get("/dashboards", isAuth, async (req, res) => {
-    res.render("teste");
+  app.get("/dashboard", isAuth, Permission, async (req, res) => {
+    moment.locale("pt");
+    moment.updateLocale("pt", {
+      months: [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ],
+    });
+
+    let dataAtual = moment().format("DD-MM-YYYY");
+    let arrayDataAtual = dataAtual.split("-");
+    let dataInicioMes = moment([
+      arrayDataAtual[2],
+      arrayDataAtual[1] - 1,
+      arrayDataAtual[0],
+    ])
+      .startOf("month")
+      .format("DD-MM-YYYY");
+
+    let dataFimMes = moment([
+      arrayDataAtual[2],
+      arrayDataAtual[1] - 1,
+      arrayDataAtual[0],
+    ])
+      .endOf("month")
+      .format("DD-MM-YYYY");
+
+    let mes = moment().format("MMMM");
+
+    res.render("dashboard/index", {
+      mes: mes,
+      inicioMes: dataInicioMes,
+      fimMes: dataFimMes,
+    });
   });
 
-  app.get("/dashboard-funcionario", isAuth, async (req, res) => {
+  app.get("/dashboard-funcionario", isAuth, Permission, async (req, res) => {
     moment.locale("pt");
     moment.updateLocale("pt", {
       months: [

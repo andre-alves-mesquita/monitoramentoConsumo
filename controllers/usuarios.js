@@ -1,9 +1,9 @@
 const isAuth = require("../middlewares/auth");
-
+const Permission = require("../middlewares/permission");
 const Usuario = require("../models/usuarios");
 
 module.exports = (app) => {
-  app.get("/usuarios", isAuth, async (req, res) => {
+  app.get("/usuarios", isAuth, Permission, async (req, res) => {
     let usuarios = await Usuario.buscarTodosUsuarios();
 
     res.render("usuarios/index", {

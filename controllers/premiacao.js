@@ -1,9 +1,10 @@
 const Instalacoes = require("../models/instalacoes");
 const moment = require("moment"); // require
 const isAuth = require("../middlewares/auth");
+const Permission = require("../middlewares/permission");
 
 module.exports = (app) => {
-  app.get("/premiacao", isAuth, async (req, res) => {
+  app.get("/premiacao", isAuth, Permission, async (req, res) => {
     res.render("premiacao/index", {
       instalacoes: null,
       demonstrativoQuantitativoLabel: null,

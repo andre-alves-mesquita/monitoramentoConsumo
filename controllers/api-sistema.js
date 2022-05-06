@@ -19,7 +19,6 @@ module.exports = (app) => {
   app.post("/buscar-permissoes", async (req, res) => {
     let id = req.body.id;
     let permissoesUsuario = [];
-
     let permissoesId = await Permissoes.buscarTodasPermissoesUsuariosId(id);
     let permissoes = await Permissoes.buscarTodasPermissoes();
 

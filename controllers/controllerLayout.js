@@ -45,52 +45,6 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/home", isAuth, async (req, res) => {
-    moment.locale("pt");
-    moment.updateLocale("pt", {
-      months: [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Dezembro",
-      ],
-    });
-
-    let dataAtual = moment().format("DD-MM-YYYY");
-    let arrayDataAtual = dataAtual.split("-");
-    let dataInicioMes = moment([
-      arrayDataAtual[2],
-      arrayDataAtual[1] - 1,
-      arrayDataAtual[0],
-    ])
-      .startOf("month")
-      .format("DD-MM-YYYY");
-
-    let dataFimMes = moment([
-      arrayDataAtual[2],
-      arrayDataAtual[1] - 1,
-      arrayDataAtual[0],
-    ])
-      .endOf("month")
-      .format("DD-MM-YYYY");
-
-    let mes = moment().format("MMMM");
-
-    res.render("home/index", {
-      mes: mes,
-      inicioMes: dataInicioMes,
-      fimMes: dataFimMes,
-    });
-  });
-
   app.get("/logout", async (req, res) => {
     Sessao.deletarUsuarioLogado(req.session.id_usuario);
     req.session.destroy((err) => {
@@ -125,5 +79,9 @@ module.exports = (app) => {
     let nome = await Sessao.pegarUsuarioLogado(req.session.id_usuario);
 
     res.status(200).json(nome);
+  });
+
+  app.get("/home", isAuth, async (req, res) => {
+    res.render("home/index");
   });
 };

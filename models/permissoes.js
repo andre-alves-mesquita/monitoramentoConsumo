@@ -107,6 +107,40 @@ class Permissoes {
       }
     });
   }
+
+  removerPermissaoTodosUsuario(idPermissao) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `DELETE FROM usuario_permissoes WHERE id_permissao=${idPermissao}`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          resolve(resultados);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  removerPermissao(idPermissao) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `DELETE FROM permissoes WHERE id=${idPermissao}`;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          resolve(resultados);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 module.exports = new Permissoes();
