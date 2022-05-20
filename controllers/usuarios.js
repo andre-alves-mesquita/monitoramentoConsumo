@@ -1,6 +1,7 @@
 const isAuth = require("../middlewares/auth");
 const Permission = require("../middlewares/permission");
 const Usuario = require("../models/usuarios");
+const Permissoes = require("../models/permissoes");
 
 module.exports = (app) => {
   app.get("/usuarios", isAuth, Permission, async (req, res) => {
@@ -60,10 +61,12 @@ module.exports = (app) => {
   });
 
   app.get("/usuarios-excluir/:id", isAuth, async (req, res) => {
-    console.log(req.session.id_usuario);
+    let idUsuario = req.params.id;
 
-    if (req.session.id_usuario != req.params.id) {
-      let usuarios = await Usuario.excluirUsuario(req.params.id);
+    if (req.session.id_usuario != idUsuario) {
+      let usuarios = await Usuario.excluirUsuario(idUsuario);
+
+      let resposta = await Permissoes.removerUsuarioPermissoes(idUsuario);
     } else {
       //enviar mensagem de erro
     }

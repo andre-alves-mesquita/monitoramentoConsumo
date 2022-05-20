@@ -24,8 +24,7 @@ module.exports = (app) => {
     let usuario = req.body.selectUsuarioForm;
     let tecnico = req.body.selectTecnicoForm;
     let responsavel = req.body.selectResponsavelForm;
-    let queryDataInicio = "";
-    let queryDataFim = "";
+    let queryDataInicioFim = "";
     let queryVendedor = "";
     let queryUsuario = "";
     let queryTecnico = "";
@@ -43,6 +42,25 @@ module.exports = (app) => {
     let valorInstalacoesArredondado = [];
     let valorTotalPago = 0;
 
+
+    if(dataInicio != "" && dataFim != ""){
+      queryDataInicioFim += `    
+      and
+      CASE WHEN ao2.data_finalizacao IS not NULL THEN
+       TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') --data_finalizacao
+      and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD')   --data_finalizacao
+     WHEN ao2.data_agendamento IS not NULL THEN
+      TO_DATE(to_char(ao2.data_agendamento,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') --data_finalizacao
+      and TO_DATE(to_char(ao2.data_agendamento,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD')   --data_finalizacao
+       else
+       TO_DATE(to_char(ao2.data_cadastro,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') --data_finalizacao
+       and TO_DATE(to_char(ao2.data_cadastro,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD')   --data_finalizacao
+      end`
+      ;
+    }
+
+
+    /*
     if (dataInicio != "") {
       queryDataInicio += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('${dataInicio}'),'YYYY-MM-DD'),'YYYY-MM-DD') `;
     }
@@ -50,6 +68,7 @@ module.exports = (app) => {
     if (dataFim != "") {
       queryDataFim += `and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('${dataFim}') ,'YYYY-MM-DD'),'YYYY-MM-DD') `;
     }
+    */
 
     /*
     if (extra == "sim") {
@@ -163,8 +182,7 @@ module.exports = (app) => {
     }
 
     queryFinal +=
-      queryDataInicio +
-      queryDataFim +
+      queryDataInicioFim +
       queryResponsavel +
       queryTecnico +
       queryVendedor +
@@ -222,7 +240,7 @@ module.exports = (app) => {
       );
     }
 
-    console.log(instalacoes.rows);
+    //console.log(instalacoes.rows);
 
     res.render("premiacao/index", {
       instalacoes: instalacoes.rows,

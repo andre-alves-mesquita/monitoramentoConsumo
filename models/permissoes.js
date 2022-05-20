@@ -108,6 +108,23 @@ class Permissoes {
     });
   }
 
+  removerUsuarioPermissoes(idUsuario) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sql = `DELETE FROM usuario_permissoes WHERE id_usuario=${idUsuario} `;
+
+        conexaoMs.query(sql, (erro, resultados) => {
+          if (erro) {
+            console.log(erro);
+          }
+          resolve(resultados);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   removerPermissaoTodosUsuario(idPermissao) {
     return new Promise((resolve, reject) => {
       try {
