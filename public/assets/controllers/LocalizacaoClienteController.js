@@ -1,0 +1,5 @@
+class LocalizacaoClienteController {
+  constructor() {}
+
+  esconderImagemBotao() {}
+}

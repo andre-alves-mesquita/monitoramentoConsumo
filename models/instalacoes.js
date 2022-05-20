@@ -44,27 +44,6 @@ class Instalacoes {
       	where CC.id = ac.id  and at2.tag = 'Base WSE') = 0 
       	and (ao2.conteudo not like '%MIGRAÇÃO%' or ao2.conteudo not like '%MUDANÇA%' or ao2.conteudo not like '%INVIABILIDADE%' or ao2.conteudo not like '%SUSPENSO%')	
        	and (at3.id = 17 or at3.id = 31 or at3.id = 44 or at3.id = 36 or at3.id = 36) 
-        and
-      	CASE WHEN ao2.data_finalizacao IS not NULL THEN
-       	TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('2022-05-01'),'YYYY-MM-DD'),'YYYY-MM-DD') --data_finalizacao
-        and TO_DATE(to_char(ao2.data_finalizacao,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('2022-05-31') ,'YYYY-MM-DD'),'YYYY-MM-DD')   --data_finalizacao
-     	WHEN ao2.data_agendamento IS not NULL THEN
-        TO_DATE(to_char(ao2.data_agendamento,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('2022-05-01'),'YYYY-MM-DD'),'YYYY-MM-DD') --data_finalizacao
-        and TO_DATE(to_char(ao2.data_agendamento,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('2022-05-31') ,'YYYY-MM-DD'),'YYYY-MM-DD')   --data_finalizacao
-       	else
-       	TO_DATE(to_char(ao2.data_cadastro,'YYYY-MM-DD'),'YYYY-MM-DD') >= TO_DATE(to_char(date('2022-05-01'),'YYYY-MM-DD'),'YYYY-MM-DD') --data_finalizacao
-       	and TO_DATE(to_char(ao2.data_cadastro,'YYYY-MM-DD'),'YYYY-MM-DD') <= TO_DATE(to_char(date('2022-05-31') ,'YYYY-MM-DD'),'YYYY-MM-DD')   --data_finalizacao
-        end
-        /*
-        and ( select count(*) from atendimento_ocorrencia ao5 
-        inner join admcore_clientecontrato ac4 on (ao5.clientecontrato_id = ac4.id)
-        where ((ao5.conteudo like '%MIGRAÇÃO%') 
-        or ao5.conteudo  like '%MUDANÇA DE PLANO%' 
-        or ao5.conteudo  like '%INVIABILIDADE%' 
-        or ao5.conteudo  like '%inviabilidade%' 
-        or ao5.conteudo  like '%SUSPENSO%'
-        ) and ac.id = ac4.id ) = 0*/
-        
         and (select count(*) from atendimento_ocorrencia ao5 
         inner join admcore_clientecontrato ac4 on (ao5.clientecontrato_id = ac4.id)
         where ac.id = ac4.id
