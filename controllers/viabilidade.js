@@ -1,9 +1,10 @@
 const isAuth = require("../middlewares/auth");
+require("dotenv").config(); //carregar configurações do dotenv
 
 module.exports = (app) => {
   app.get("/localizacao-cliente", async (req, res) => {
     res.render("localizacao-cliente/index", {
-      apiGoogle: "AIzaSyBzsQMN3v-9sFoq_eVhfPIGhn9ENR35iCg",
+      apiGoogle:  process.env.API_GOOGLE_MAPS,
     });
   });
 
