@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radnet Telecom</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/img/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/img/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/img/favicon-16x16.png"
+    />
+       <!-- CSS only -->
+       <link
+       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+       rel="stylesheet"
+       integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+       crossorigin="anonymous"
+     />
+     <style>
+              body {
+        background-image: url("assets/img/cidade.jpg");
+        background-position: center;
+        /* Center the image */
+        background-repeat: no-repeat;
+        /* Do not repeat the image */
+        background-size: cover;
+        background-attachment: fixed;
+      }
+      .conteudo {
+  background-color: white;
+}
+
+     </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="container">
+<div class="row text-center d-flex justify-content-center">
+    <div class="col-xl-6 col-lg-11 conteudo rounded-3 pt-3 pb-3 mt-5 mb-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-6">
+                <img src="assets/img/Logo Completo.png" width="100%" class="image">
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center text-center">
+            <div class="col-8">
+                <p>Entraremos em contato informando a viabilidade</p>
+                <p>Você será redirecinado para o site da Radnet Telecom em:
+                    <div id="counter" class="bg-warning rounded-3 text-light">15</div> segundos
+                    </p>
+            </div>
+        </div>
+    </div>
+</div>
+       
+    </div>
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"
+  ></script>
+    <script>
+
+    
+        
+        setInterval(function() {
+            var div = document.querySelector("#counter");
+            var count = div.textContent * 1 - 1;
+            div.textContent = count;
+            if (count <= 0) {
+                window.location.replace("https://www.viaradnet.com.br");
+            }
+        }, 1000);
+        
+    </script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+  
+    </div>
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-search"></i></i></span>   Pesquisar Viabilidade Endereço / Coordenada Google</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                <label for="exampleInputEmail1">Endereço ou localização (latitude/longitude)</label>
+                                <div class="row mb-3">
+                                    
+                                    <div class="col-6">
+                                        <select class="form-control" id="inputGroupSelect01" name="tipo" onchange="mudarPlace()">                                     
+                                            <option value="latlon" selected>Coordenadas do Google</option>
+                                            <option value="endereco" >Endereço</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" value="<%= endereco %>" aria-describedby="basic-addon1" required>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">Distancia em Metros</label>
+                                            <input type="number" class="form-control" value="<%= distancia %>" min="0" max="6000" name="distancia" aria-label="Username" aria-describedby="basic-addon1" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" value="mostrar" id="flexCheckDefault" name="mostrar">
+                                            <label class="form-check-label" for="exampleCheck1">
+                                                Nome da CTO sobre o ícone
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                            <button type="submit" class="btn btn-primary" onclick="mostrar()">Pesquisar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+                    <div class="card">
+                     
+                        <div class="card-body d-flex justify-content-center">
+                          <span class="text-center text-danger">
+                            Utilize os direcionais para mover, o scroll do mouse para dar zoom e tirar zoom e o
+                            <strong>botão direito para limpar a tela</strong>
+                          </span>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+                    <!-- general form elements -->
+                    <div class="card">
+                        <div id="map"></div>
+                        
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">CTOS Encontradas</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Capacidade</th>
+                                        <th scope="col">Qtd. Clientes</th>
+                                        <th scope="col">Portas Disponivel</th>
+                                        <th scope="col">Distância(m)</th>
+                                        <th scope="col">Nome</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  
+    
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= apiGoogle %>&callback=initAutocomplete&libraries=places,drawing" async></script>

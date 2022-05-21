@@ -33,7 +33,9 @@
       src="https://maps.google.com/maps/api/js?key=<%= apiGoogle %>"
       type="text/javascript"
     ></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.mask.js"></script>
     <link rel="stylesheet" href="assets/css/estilo-localizacao-cliente.css" />
     <style>
       body {
@@ -52,39 +54,105 @@
     </style>
   </head>
   <body>
+    <script>
+      $(document).ready(function () {
+        var $seuCampoCpf = $("#fone");
+        $seuCampoCpf.mask("00-00000-0000", {
+          reverse: true,
+        });
+      });
+    </script>
     <div class="container-fluid">
       <div class="container">
         <div class="row text-center d-flex justify-content-center">
-          <div class="col-6 conteudo rounded-3 p-3 mt-5 mb-5">
-            <div class="row mb-3">
-              <img src="assets/img/Logo Completo.png" width="70%" />
+          <div class="col-xl-6 col-lg-11 conteudo rounded-3 p-5 mt-5 mb-5">
+            <div class="row mb-3 d-flex justify-content-center">
+              <div class="col-8">
+                <img src="assets/img/Logo Completo.png" width="100%" />
+              </div>
             </div>
-            <div class="row mb-3">
-              <p>
-                Para que nós da Radnet Telecom possamos verificar a sua
-                viabilidade, precisamos da sua localização. Clique no botão
-                abaixo: Lembre-se de ativar a localização do celular ou
-                navegador
+            <div class="row mb-3 bg-success rounded-3 p-3 text-light">
+              <h3>Olá,</h3>
+
+              <p class="">
+                Nós da Radnet Telecom desenvolvemos esse sistema para facilitar
+                que nossos futuros clientes tenham uma resposta imediata se há
+                viabilidade de internet em sua região.
+                <br />
+                <br />
+                Para que nós possamos verificar a sua viabilidade, precisamos da
+                sua localização. Lembre-se de ligar a localização do seu celular
+                ou permitir a localização no seu navegador como mostram as
+                imagens a baixo.
               </p>
             </div>
-            <div class="row mb-3">
-              <img src="assets/img/localizacao.jpg" width="70%" />
+            <div
+              class="row mb-3 d-flex justify-content-between bg-success rounded-3 p-3"
+            >
+              <div class="col-6">
+                <span class="text-light mb-2">Localização celular</span>
+                <img src="assets/img/localizacao.jpg" width="100%" />
+              </div>
+              <div class="col-6">
+                <span class="text-light mb-2">Localização navegador</span>
+                <img src="assets/img/location.png" width="100%" />
+              </div>
             </div>
 
             <div class="row mb-3">
-              <button class="btn btn-primary" onclick="getLocation()">
-                Clique Aqui
+              <button
+                class="btn btn-success"
+                onclick="getLocation(),localizacaoClienteController.mostrarInputs()"
+                id="clique"
+              >
+                - Clique Aqui -
               </button>
             </div>
-            <div class="row">
+            <div class="row" style="display: none" id="divMap">
               <div id="map"></div>
+              <p class="text-light mt-2 bg-success rounded-3 p-3">
+                Utilize o marcador vermelho e coloque ele sobre a localização de
+                sua residência.
+                <br />
+
+                Caso o mapa não abra, verifique se a localização está ativada.
+              </p>
             </div>
-            <div class="row">
-              <span class="input-text">Número de Telefone para contato</span>
-              <input type="input-text" />
-            </div>
-            <div class="row">
-              <button class="btn btn-primary">Enviar Localizacao</button>
+            <div class="row" style="display: none" id="formulario">
+              <form method="post">
+                <div class="input mb-3" id="nome">
+                  <span class="input-text" id="basic-addon1"
+                    >Número Telefone</span
+                  >
+                  <input
+                    type="tel"
+                    class="form-control"
+                    placeholder="61-99999-9999"
+                    aria-label="Username"
+                    name="fone"
+                    id="fone"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
+                <input
+                  type=" text"
+                  id="la"
+                  name="latitude"
+                  style="visibility: hidden"
+                  hidden="hidden"
+                />
+                <input
+                  type="text"
+                  id="lo"
+                  name="longitude"
+                  style="visibility: hidden"
+                  hidden="hidden"
+                />
+                <button type="submit" id="enviar" class="btn btn-primary">
+                  Enviar localização
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -96,15 +164,26 @@
       integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
       crossorigin="anonymous"
     ></script>
-
     <script>
+      function disableF5(e) {
+        if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82)
+          e.preventDefault();
+      }
+
+      $(document).ready(function () {
+        $(document).on("keydown", disableF5);
+      });
       function getLocation() {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(initMap, showError);
+          navigator.geolocation.getCurrentPosition(
+            this.initMap,
+            this.showError
+          );
         } else {
           x.innerHTML = "Geolocalização não é suportada nesse browser.";
         }
       }
+
       function initMap(position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
