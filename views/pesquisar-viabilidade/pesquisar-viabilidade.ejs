@@ -17,13 +17,13 @@
                                 <div class="row mb-3">
                                     
                                     <div class="col-6">
-                                        <select class="form-control" id="inputGroupSelect01" name="tipo" onchange="mudarPlace()">                                     
-                                            <option value="latlon" selected>Coordenadas do Google</option>
-                                            <option value="endereco" >Endereço</option>
+                                        <select class="form-control" id="inputGroupSelect01" name="tipo" onchange="viabilidadeController.mudarPlace()">                                     
+                                            <option value="latlon" >Coordenadas do Google</option>
+                                            <option value="endereco" selected>Endereço</option>
                                         </select>
                                     </div>
                                     <div class="col-6">
-                                        <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" value="<%= endereco %>" aria-describedby="basic-addon1" required>
+                                        <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" aria-describedby="basic-addon1" required>
                                     </div>
                                     
                                 </div>
@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-3">
-                                            <button type="submit" class="btn btn-primary" onclick="mostrar()">Pesquisar</button>
+                                            <button type="submit" class="btn btn-primary">Pesquisar</button>
                                     </div>
                                 </div>
                             </form>
@@ -55,7 +55,7 @@
                         <!-- /.card-body -->
                     </div>
 
-                    <div class="card">
+                    <div class="card" id="avisoDeUso">
                      
                         <div class="card-body d-flex justify-content-center">
                           <span class="text-center text-danger">
@@ -68,11 +68,12 @@
 
                     <!-- general form elements -->
                     <div class="card">
-                        <div id="map"></div>
+                        
+                            <div id="map"></div>
                         
                     </div>
 
-                    <div class="card">
+                    <div class="card" id="tabelaCtos">
                         <div class="card-header">
                             <h3 class="card-title">CTOS Encontradas</h3>
                         </div>
@@ -104,4 +105,408 @@
     </div>
 </div>
 
+
+<script src="assets/js/autoComplete.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= apiGoogle %>&callback=initAutocomplete&libraries=places,drawing" async></script>
+
+<script src="assets/controllers/ViabilidadeController.js"></script>
+<script>
+    let viabilidadeController = new ViabilidadeController(Boolean("<%= mostrar %>"));
+</script>
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(initMap, showError);
+        } else {
+            x.innerHTML = "Geolocalização não é suportada nesse browser.";
+        }
+    }
+
+    function initMap(position) {
+
+        const points = [];
+        const origin = [];
+        const destination = [];
+        const overlay = [];
+        let stringLatlon = `<%- latlon %>`;
+        let latlon = JSON.parse(stringLatlon);
+        let tipo = "<%= tipo %>";
+        let distancia = Number("<%= distancia %>");
+
+        if (latlon == "") {
+            var latitude = -15.9028;
+            var longitude = -47.776;
+        } else {   
+            if (tipo == "endereco") {
+                
+                var latitude = Number(latlon.lat);
+                var longitude = Number(latlon.lng);
+            } else {
+                
+                var latitude = latlon[0];
+                var longitude = latlon[1];
+            }
+        }
+
+        var uluru = {
+            lat: latitude,
+            lng: longitude
+        };
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 17,
+            center: uluru,
+            mapTypeControl: true,
+            //mapTypeId: "satellite",
+            disableDefaultUI: false,
+            gestureHandling: 'greedy'
+        });
+
+        const drawingManager = new google.maps.drawing.DrawingManager({
+            //drawingMode: google.maps.drawing.OverlayType.POLYLINE,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [google.maps.drawing.OverlayType.POLYLINE],
+            },
+        });
+
+        google.maps.event.addListener(
+            drawingManager,
+            "polylinecomplete",
+            function(polyline) {
+                overlay.push(polyline);
+
+                let posicao = null;
+
+                console.log(polyline.getPath());
+
+                if (polyline.getPath().Dd) {
+                    posicao = polyline.getPath().Dd;
+                } else if (polyline.getPath().Fd) {
+                    posicao = polyline.getPath().Fd;
+                } else if (polyline.getPath().Gd) {
+                    posicao = polyline.getPath().Gd;
+                } else if (polyline.getPath().Hd) {
+                    posicao = polyline.getPath().Hd;
+                } else if (polyline.getPath().Id) {
+                    posicao = polyline.getPath().Id;
+                } else if (polyline.getPath().Jd) {
+                    posicao = polyline.getPath().Jd;
+                }else {
+                    posicao = polyline.latLngs.Ed[0].Ed;
+                }
+
+                let total = null;
+
+                for (let index = 0; index < posicao.length; index++) {
+                    $("#latitude").val(posicao[index].lat());
+                    $("#longitude").val(posicao[index].lat());
+                    const myLatLng = {
+                        lat: posicao[index].lat(),
+                        lng: posicao[index].lng(),
+                    };
+
+                    const image = "assets/img/422371.svg";
+                    const image2 = "assets/img/153647.svg";
+
+                    if (index == 0) {
+                        let marker = new google.maps.Marker({
+                            position: myLatLng,
+                            map,
+                            icon: image,
+                        });
+                    }
+
+                    if (index > 0) {
+                        let distancia = calcularDistancia(
+                            [posicao[index - 1].lat(), posicao[index - 1].lng()],
+                            [posicao[index].lat(), posicao[index].lng()]
+                        );
+                        total += distancia;
+                        points.push(distancia);
+                        let marker = new google.maps.Marker({
+                            position: myLatLng,
+                            map,
+                            icon: image2,
+                            title: `${Math.round(distancia * 1000)}m`,
+                        });
+                        const contentString = `
+                        <div>
+                            Distancia: ${Math.round(total * 1000)}m
+                        </div>
+                        `;
+                        const infowindow = new google.maps.InfoWindow({
+                            content: contentString,
+                        });
+
+                        infowindow.open({
+                            anchor: marker,
+                            map,
+                            shouldFocus: false,
+                        });
+                    }
+                }
+            }
+        );
+        
+        google.maps.event.addListener(map, "rightclick", function(event) {
+            for (var i = 0; i < overlay.length; i++) {
+                overlay[i].setMap(null);
+            }
+            document.location.reload(true);
+        });
+
+        drawingManager.setMap(map);
+
+        marker = new google.maps.Marker({
+            map: map,
+            position: uluru,
+            animation: google.maps.Animation.DROP,
+        });
+
+        if (distancia == "") {
+            new google.maps.Circle({
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.3,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.2,
+                map,
+                center: uluru,
+                radius: 200,
+            });
+        } else {
+            new google.maps.Circle({
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.3,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.2,
+                map,
+                center: uluru,
+                radius: distancia,
+            });
+        }
+
+
+
+        /*
+        let app = "<%= arrayPosicaoCTOS %>";
+
+        // Create an info window to share between markers.
+        const infoWindow = new google.maps.InfoWindow();
+
+        var mostrar = "<%= mostrar %>";
+
+        
+
+        for (let i = 0; i < app.length; i = i + 1) {
+
+            //mudar a cor da primeira CTO
+
+            var uluru2 = {
+                lat: app[i].latitude,
+                lng: app[i].longitude
+            };
+
+
+            if (i === 0) {
+                var color = "#00ff00";
+            } else {
+                var color = "#0033cc";
+            }
+
+            const contentString =
+
+                "<h5>" + `${app[i].nomeCTO}` + "</h5>" +
+                "<strong>" +
+                "Latitude: " + `${app[i].latitude}` +
+                "<br>Longitude: " + `${app[i].longitude}` +
+                "<br>Capacidade: " + `${app[i].capacidade}` +
+                "<br>Quantidade de Clientes: " + `${app[i].qtdClientes}` +
+                "<br>Portas Disponíveis: " + `${app[i].portasDisponiveis}` +
+                "<br>Distância: " + `${app[i].distancia}` +
+                "</strong>"
+
+            ;
+
+
+            const svgMarker = {
+                path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                fillColor: color,
+                fillOpacity: 1,
+                strokeWeight: 0,
+                rotation: 0,
+                scale: 2,
+                anchor: new google.maps.Point(0, 0),
+            };
+
+            if (mostrar == "mostrar") {
+
+                const marker = new google.maps.Marker({
+                    position: uluru2,
+                    // icon: "{{ asset('asset/pin.png') }}",
+                    icon: svgMarker,
+                    map: map,
+                    //label: `${i + 1}. ` + app[i].nomeCTO,
+                    label: {
+                        text: app[i].nomeCTO,
+                        fontSize: '22px',
+                        color: 'white',
+                        fontWeight: '600',
+                        fontFamily: 'arial'
+                    }
+
+                });
+
+
+            } else {
+                const marker = new google.maps.Marker({
+                    position: uluru2,
+                    // icon: "{{ asset('asset/pin.png') }}",
+                    icon: svgMarker,
+                    map: map,
+                    title: app[i].nomeCTO,
+
+                });
+
+                // Add a click listener for each marker, and set up the info window.
+                marker.addListener("click", () => {
+                    infoWindow.close();
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(marker.getMap(), marker);
+
+                });
+
+            }
+         
+
+        }
+        */
+           
+
+        latlon[0] = null;
+        latlon[1] = null;
+
+        latlon.lat = null;
+        latlon.lng = null;
+
+
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                x.innerHTML = "Usuário rejeitou a solicitação de Geolocalização."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                x.innerHTML = "Localização indisponível."
+                break;
+            case error.TIMEOUT:
+                x.innerHTML = "O tempo da requisição expirou."
+                break;
+            case error.UNKNOWN_ERROR:
+                x.innerHTML = "Algum erro desconhecido aconteceu."
+                break;
+        }
+    }
+
+    function fazerCalculoDistancia(origin, destination) {
+        var service = new google.maps.DistanceMatrixService();
+
+        service.getDistanceMatrix({
+                origins: origin,
+                destinations: destination,
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false,
+            },
+            callback
+        );
+
+        function callback(response, status) {
+            if (status == "OK") {
+                var origins = response.originAddresses;
+                var destinations = response.destinationAddresses;
+                let distancia = 0;
+
+                for (var i = 0; i < origins.length; i++) {
+                    var results = response.rows[i].elements;
+                    for (var j = 0; j < results.length; j++) {
+                        var element = results[j];
+                        var distance = element.distance.value;
+                        var duration = element.duration.text;
+                        var from = origins[i];
+                        var to = destinations[j];
+                        if (j - i == 0) {
+                            distancia += Number(element.distance.value);
+                            console.log(element.distance.value);
+                        }
+                    }
+                }
+                console.log("distancia total: " + distancia);
+                $("#resultadoDistancia").empty();
+                $("#resultadoDistancia").append(`
+                <div class="d-flex justify-content-between">
+                <div class="card p-1 bg-danger text-center">
+                    <strong> Distancia: ${distancia} </strong>
+                </div>
+                <div class="">
+                <button type="button" class="btn btn-sm btn-success" onclick="recarregarPagina()">Recarregar</button>
+                </div>
+                </div>
+                `);
+            }
+        }
+    }
+
+    function recarregarPagina() {
+        document.location.reload(true);
+    }
+
+    function calcularDistancia(x, y) {
+        "use strict";
+
+        // haversine :: (Num, Num) -> (Num, Num) -> Num
+        const haversine = ([lat1, lon1], [lat2, lon2]) => {
+            // Math lib function names
+            const [pi, asin, sin, cos, sqrt, pow, round] = [
+                "PI",
+                "asin",
+                "sin",
+                "cos",
+                "sqrt",
+                "pow",
+                "round",
+            ].map((k) => Math[k]),
+                // degrees as radians
+                [rlat1, rlat2, rlon1, rlon2] = [lat1, lat2, lon1, lon2].map(
+                    (x) => (x / 180) * pi
+                ),
+                dLat = rlat2 - rlat1,
+                dLon = rlon2 - rlon1,
+                radius = 6372.8; // km
+
+            // km
+            return (
+                round(
+                    radius *
+                    2 *
+                    asin(
+                        sqrt(
+                            pow(sin(dLat / 2), 2) +
+                            pow(sin(dLon / 2), 2) * cos(rlat1) * cos(rlat2)
+                        )
+                    ) *
+                    100
+                ) / 100
+            );
+        };
+
+        // TEST
+        return haversine(x, y);
+    }
+</script>
+

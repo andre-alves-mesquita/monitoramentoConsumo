@@ -24,8 +24,6 @@ module.exports = (app) => {
 
         let usuarioLogando = usuarioLogado[0];
 
-        console.log(usuarioLogando);
-
         req.session.id_usuario = usuarioLogando.id;
         req.session.nome = usuarioLogando.login;
         req.session.usuario = usuarioLogando.usuario;
