@@ -35,6 +35,7 @@ module.exports = (app) => {
         endereco: null,
         distancia: 200,
         mostrar: null,
+        finalResultados: null,
         apiGoogle: process.env.API_GOOGLE_MAPS,
         arrayPosicaoCTOS: [],
       });
@@ -51,6 +52,9 @@ module.exports = (app) => {
       let apiGoogle = null;
       let latlon = null;
       let resultadosCtos = null;
+      let repostaFrontCtos = [];
+      let latlonCortada = null;
+      let distanciaInicial = null;
       loginGeosite = process.env.GEOSITE_LOGIN;
       senhaGeosite = process.env.GEOSITE_SENHA;
       apiGoogle = process.env.API_GOOGLE_MAPS;
@@ -67,7 +71,7 @@ module.exports = (app) => {
         await axios(config)
           .then(function (response) {
             resultadoGoogleApi = response.data.results[0].geometry.location;
-            console.log(resultadoGoogleApi);
+            // console.log(resultadoGoogleApi);
           })
           .catch(function (error) {
             console.log(error);
@@ -84,7 +88,7 @@ module.exports = (app) => {
         await axios(config)
           .then(function (response) {
             resultadoDigicade = response.data;
-            console.log(resultadoDigicade.token);
+            // console.log(resultadoDigicade.token);
           })
           .catch(function (error) {
             console.log(error);
@@ -104,7 +108,7 @@ module.exports = (app) => {
         await axios(config)
           .then(function (response) {
             resultadosCtos = response.data;
-            console.log(resultadosCtos);
+            //console.log(resultadosCtos);
           })
           .catch(function (error) {
             console.log(error);
@@ -114,13 +118,24 @@ module.exports = (app) => {
           //retornar erro
         }
 
+        if (resultadosCtos.caixas[0].distancia) {
+          distanciaInicial = resultadosCtos.caixas[0].distancia;
+        } else {
+          distanciaInicial = "";
+        }
+
+        console.log(distanciaInicial);
+
         res.render("pesquisar-viabilidade/index", {
+          distanciaInicial: distanciaInicial,
+          endereco: endereco,
           distancia: distancia,
           apiGoogle: process.env.API_GOOGLE_MAPS,
           latlon: JSON.stringify(resultadoGoogleApi),
           mostrar: mostrar,
           tipo: tipo,
-          arrayPosicaoCTOS: resultadosCtos.caixas,
+          arrayPosicaoCTOS: JSON.stringify(resultadosCtos),
+          finalResultados: resultadosCtos.caixas,
         });
       } else {
       }

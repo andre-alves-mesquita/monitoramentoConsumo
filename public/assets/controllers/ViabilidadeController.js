@@ -1,7 +1,5 @@
 class ViabilidadeController {
-  constructor(mostrar) {
-    this.ocultarMostrar(mostrar);
-  }
+  constructor() {}
 
   mudarPlace() {
     var tipo = document.getElementById("inputGroupSelect01");
@@ -18,11 +16,13 @@ class ViabilidadeController {
 
   ocultarMostrar(mostrar) {
     if (mostrar == true) {
-      //document.getElementById("tabelaCtos").removeAttribute("hidden");
-      //document.getElementById("avisoDeUso").removeAttribute("hidden");
+      document.getElementById("tabelaCtos").removeAttribute("hidden");
+      document.getElementById("avisoDeUso").removeAttribute("hidden");
+      document.getElementById("map").removeAttribute("hidden");
     } else {
-      //document.getElementById("tabelaCtos").setAttribute("hidden", true);
-      //document.getElementById("avisoDeUso").setAttribute("hidden", true);
+      document.getElementById("tabelaCtos").setAttribute("hidden", true);
+      document.getElementById("avisoDeUso").setAttribute("hidden", true);
+      document.getElementById("map").setAttribute("hidden", true);
     }
   }
 }

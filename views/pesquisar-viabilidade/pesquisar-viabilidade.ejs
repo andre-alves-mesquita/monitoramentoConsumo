@@ -17,13 +17,33 @@
                                 <div class="row mb-3">
                                     
                                     <div class="col-6">
-                                        <select class="form-control" id="inputGroupSelect01" name="tipo" onchange="viabilidadeController.mudarPlace()">                                     
-                                            <option value="latlon" >Coordenadas do Google</option>
-                                            <option value="endereco" selected>Endereço</option>
+                                        <select class="form-control" id="inputGroupSelect01" name="tipo" onchange="viabilidadeController.mudarPlace()">       
+                                            <% if(endereco){ %>
+                                                <% if(tipo == "endereco"){ %>
+                                                    
+                                                    <option value="latlon">Coordenadas do Google1</option>
+                                                    <option value="endereco" selected>Endereço</option>
+                                                <% }else{ %>
+                                                    
+                                                    <option value="latlon" selected>Coordenadas do Google2</option>
+                                                    <option value="endereco">Endereço</option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                
+                                                <option value="latlon">Coordenadas do Google3</option>
+                                                <option value="endereco" selected>Endereço</option>
+                                            <% } %>
                                         </select>
                                     </div>
                                     <div class="col-6">
-                                        <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" aria-describedby="basic-addon1" required>
+
+                                        <% if(endereco){ %>
+                                            <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" value="<%= endereco %>" aria-describedby="basic-addon1" required>
+                                        <% }else{ %>
+                                            <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" aria-describedby="basic-addon1" required>
+                                        <% } %>
+
+                                       
                                     </div>
                                     
                                 </div>
@@ -90,8 +110,45 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  
-    
+                                <% if(finalResultados){ %>
+                                    <% for(var i=0; i < finalResultados.length; i++) { %>
+                                        <% if(finalResultados[i].distancia == distanciaInicial){ %>
+                                            <tr>
+                                                <th scope="row" style="color: green; font-weight: bold;">
+                                                    <%= finalResultados[i].qtdPortasSplitter %> </th>
+            
+                                                <td style="color: green;font-weight: bold;"> <%= finalResultados[i].qtdClientes %> </td>
+                                                <td style="color: green;font-weight: bold;"> <%= finalResultados[i].qtdTotalDisponivel %> </td>
+                                                <td style="color: green;font-weight: bold;"> <%= finalResultados[i].distancia %> </td>
+                                                <td style="color: green;font-weight: bold;"> <%= finalResultados[i].tipoCodigo %> </td>
+            
+                                            </tr>
+                                        <% }else{ %>
+                                            <% if(finalResultados[i].distancia <= 200){ %>
+                                                <th scope="row" style="color: blue; font-weight: bold;">
+                                                    <%= finalResultados[i].qtdPortasSplitter %> </th>
+            
+                                                <td style="color: blue;font-weight: bold;"> <%= finalResultados[i].qtdClientes %> </td>
+                                                <td style="color: blue;font-weight: bold;"> <%= finalResultados[i].qtdTotalDisponivel %> </td>
+                                                <td style="color: blue;font-weight: bold;"> <%= finalResultados[i].distancia %> </td>
+                                                <td style="color: blue;font-weight: bold;"> <%= finalResultados[i].tipoCodigo %> </td>
+            
+                                                </tr>
+                                            <% }else { %>
+                                                <tr>
+                                                    <th scope="row" style="color: red;">
+                                                        <%= finalResultados[i].qtdPortasSplitter %> </th>
+            
+                                                    <td style="color: red;"> <%= finalResultados[i].qtdClientes %> </td>
+                                                    <td style="color: red;"> <%= finalResultados[i].qtdTotalDisponivel %> </td>
+                                                    <td style="color: red;"> <%= finalResultados[i].distancia %> </td>
+                                                    <td style="color: red;"> <%= finalResultados[i].tipoCodigo %> </td>
+            
+                                                </tr>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                <% } %>
                                 </tbody>
                             </table>
                         </div>
@@ -111,7 +168,7 @@
 
 <script src="assets/controllers/ViabilidadeController.js"></script>
 <script>
-    let viabilidadeController = new ViabilidadeController(Boolean("<%= mostrar %>"));
+    let viabilidadeController = new ViabilidadeController();
 </script>
 <script>
     function getLocation() {
@@ -128,8 +185,16 @@
         const origin = [];
         const destination = [];
         const overlay = [];
+        let latlon = null;
+
         let stringLatlon = `<%- latlon %>`;
-        let latlon = JSON.parse(stringLatlon);
+
+        if(stringLatlon != ""){
+            latlon = JSON.parse(stringLatlon);
+        }else{
+            latlon = "";
+        }
+      
         let tipo = "<%= tipo %>";
         let distancia = Number("<%= distancia %>");
 
@@ -265,6 +330,8 @@
             animation: google.maps.Animation.DROP,
         });
 
+        
+
         if (distancia == "") {
             new google.maps.Circle({
                 strokeColor: "#FF0000",
@@ -289,110 +356,129 @@
             });
         }
 
+        let resultadoCtos = `<%- arrayPosicaoCTOS %>`;
+
+        if(resultadoCtos != ""){
+            let app = JSON.parse(resultadoCtos);
+        let caixas = app.caixas;  
+        let repostaFrontCtos = [];
+
+        caixas.forEach((element) => {
+          latlonCortada = element.geometryCaixaEmenda.substr(
+            7,
+            element.geometryCaixaEmenda.length - 8
+          );
+
+          let latlonEscopo = latlonCortada.split(" ");
+
+          repostaFrontCtos.push({
+            latitude: latlonEscopo[0],
+            longitude: latlonEscopo[1],
+            nomeCTO: element.tipoCodigo,
+            capacidade: element.qtdPortasSplitter,
+            qtdClientes: element.qtdClientes,
+            portasDisponiveis: element.qtdTotalDisponivel,
+            distancia: element.distancia,
+          });
+        });
+
+               // Create an info window to share between markers.
+               const infoWindow = new google.maps.InfoWindow();
+
+var mostrar = "<%= mostrar %>";
+ 
+for (let i = 0; i < repostaFrontCtos.length; i = i + 1) {
+
+    //mudar a cor da primeira CTO
+
+    var uluru2 = {
+        lat: Number(repostaFrontCtos[i].longitude),
+        lng: Number(repostaFrontCtos[i].latitude)
+    };
+
+    if (i === 0) {
+        var color = "#00ff00";
+    } else {
+        var color = "#0033cc";
+    }
+
+    const contentString =
+
+        "<h5>" + `${repostaFrontCtos[i].nomeCTO}` + "</h5>" +
+        "<strong>" +
+        "Latitude: " + `${repostaFrontCtos[i].latitude}` +
+        "<br>Longitude: " + `${repostaFrontCtos[i].longitude}` +
+        "<br>Capacidade: " + `${repostaFrontCtos[i].capacidade}` +
+        "<br>Quantidade de Clientes: " + `${repostaFrontCtos[i].qtdClientes}` +
+        "<br>Portas Disponíveis: " + `${repostaFrontCtos[i].portasDisponiveis}` +
+        "<br>Distância: " + `${repostaFrontCtos[i].distancia}` +
+        "</strong>"
+
+    ;
+
+    const svgMarker = {
+        path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+        fillColor: color,
+        fillOpacity: 1,
+        strokeWeight: 0,
+        rotation: 0,
+        scale: 2,
+        anchor: new google.maps.Point(0, 0),
+    };
 
 
-        /*
-        let app = "<%= arrayPosicaoCTOS %>";
+    if (mostrar == "mostrar") {
+    
+        const marker = new google.maps.Marker({
+            position: uluru2,
+            //icon: "assets/img/pin.png",
+            icon: svgMarker,
+            
+            map: map,
+            //label: `${i + 1}. ` + app[i].nomeCTO,
+            label: {
+                text: `${repostaFrontCtos[i].nomeCTO}`,
+                fontSize: '22px',
+                color: 'white',
+                fontWeight: '600',
+                fontFamily: 'arial'
+            }
 
-        // Create an info window to share between markers.
-        const infoWindow = new google.maps.InfoWindow();
+        });
 
-        var mostrar = "<%= mostrar %>";
+    } else {
+        
+        const marker = new google.maps.Marker({
+            position: uluru2,
+            //icon: "assets/img/pin.png",
+            icon: svgMarker,
+            map: map,
+            title: `${repostaFrontCtos[i].nomeCTO}`
 
+        });
+     
+        // Add a click listener for each marker, and set up the info window.
+        marker.addListener("click", () => {
+            infoWindow.close();
+            infoWindow.setContent(contentString);
+            infoWindow.open(marker.getMap(), marker);
+
+        });
         
 
-        for (let i = 0; i < app.length; i = i + 1) {
+    }
+ 
 
-            //mudar a cor da primeira CTO
-
-            var uluru2 = {
-                lat: app[i].latitude,
-                lng: app[i].longitude
-            };
-
-
-            if (i === 0) {
-                var color = "#00ff00";
-            } else {
-                var color = "#0033cc";
-            }
-
-            const contentString =
-
-                "<h5>" + `${app[i].nomeCTO}` + "</h5>" +
-                "<strong>" +
-                "Latitude: " + `${app[i].latitude}` +
-                "<br>Longitude: " + `${app[i].longitude}` +
-                "<br>Capacidade: " + `${app[i].capacidade}` +
-                "<br>Quantidade de Clientes: " + `${app[i].qtdClientes}` +
-                "<br>Portas Disponíveis: " + `${app[i].portasDisponiveis}` +
-                "<br>Distância: " + `${app[i].distancia}` +
-                "</strong>"
-
-            ;
-
-
-            const svgMarker = {
-                path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-                fillColor: color,
-                fillOpacity: 1,
-                strokeWeight: 0,
-                rotation: 0,
-                scale: 2,
-                anchor: new google.maps.Point(0, 0),
-            };
-
-            if (mostrar == "mostrar") {
-
-                const marker = new google.maps.Marker({
-                    position: uluru2,
-                    // icon: "{{ asset('asset/pin.png') }}",
-                    icon: svgMarker,
-                    map: map,
-                    //label: `${i + 1}. ` + app[i].nomeCTO,
-                    label: {
-                        text: app[i].nomeCTO,
-                        fontSize: '22px',
-                        color: 'white',
-                        fontWeight: '600',
-                        fontFamily: 'arial'
-                    }
-
-                });
-
-
-            } else {
-                const marker = new google.maps.Marker({
-                    position: uluru2,
-                    // icon: "{{ asset('asset/pin.png') }}",
-                    icon: svgMarker,
-                    map: map,
-                    title: app[i].nomeCTO,
-
-                });
-
-                // Add a click listener for each marker, and set up the info window.
-                marker.addListener("click", () => {
-                    infoWindow.close();
-                    infoWindow.setContent(contentString);
-                    infoWindow.open(marker.getMap(), marker);
-
-                });
-
-            }
-         
-
+}
         }
-        */
-           
-
-        latlon[0] = null;
-        latlon[1] = null;
-
-        latlon.lat = null;
-        latlon.lng = null;
 
 
+      
+
+
+
+     
+        
     }
 
     function showError(error) {
