@@ -21,16 +21,16 @@
                                             <% if(endereco){ %>
                                                 <% if(tipo == "endereco"){ %>
                                                     
-                                                    <option value="latlon">Coordenadas do Google1</option>
+                                                    <option value="latlon">Coordenadas do Google</option>
                                                     <option value="endereco" selected>Endereço</option>
                                                 <% }else{ %>
                                                     
-                                                    <option value="latlon" selected>Coordenadas do Google2</option>
+                                                    <option value="latlon" selected>Coordenadas do Google</option>
                                                     <option value="endereco">Endereço</option>
                                                 <% } %>
                                             <% }else{ %>
                                                 
-                                                <option value="latlon">Coordenadas do Google3</option>
+                                                <option value="latlon">Coordenadas do Google</option>
                                                 <option value="endereco" selected>Endereço</option>
                                             <% } %>
                                         </select>
@@ -43,6 +43,8 @@
                                             <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Quadra x Rua x Casa x Lote x São Sebastiao DF" aria-describedby="basic-addon1" required>
                                         <% } %>
 
+                                        
+
                                        
                                     </div>
                                     
@@ -51,7 +53,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Distancia em Metros</label>
-                                            <input type="number" class="form-control" value="<%= distancia %>" min="0" max="6000" name="distancia" aria-label="Username" aria-describedby="basic-addon1" autocomplete="off">
+                                            <input type="number" class="form-control" value="<%= distancia %>" min="0" max="6000" name="distancia" aria-label="Username" aria-describedby="basic-addon1" autocomplete="off" required>
                                         </div>
                                     </div>
                                 </div>
@@ -74,6 +76,19 @@
                         </div>
                         <!-- /.card-body -->
                     </div>
+
+
+                    <% if(erro){ %>
+                    <div class="card" id="AvisoErro">
+                     
+                        <div class="card-body text-center">
+                            <% for(var i=0; i < erro.length; i++) { %>
+                                <strong><p class="text-purple"> - <%= erro[i] %> </p></strong>
+                            <% } %> 
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <% } %>
 
                     <div class="card" id="avisoDeUso">
                      
@@ -165,10 +180,9 @@
 
 <script src="assets/js/autoComplete.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= apiGoogle %>&callback=initAutocomplete&libraries=places,drawing" async></script>
-
 <script src="assets/controllers/ViabilidadeController.js"></script>
 <script>
-    let viabilidadeController = new ViabilidadeController();
+    let viabilidadeController = new ViabilidadeController("<%= erro %>");
 </script>
 <script>
     function getLocation() {
@@ -207,9 +221,9 @@
                 var latitude = Number(latlon.lat);
                 var longitude = Number(latlon.lng);
             } else {
-                
-                var latitude = latlon[0];
-                var longitude = latlon[1];
+                var latlonArray = latlon.split(",");
+                var latitude = Number(latlonArray[0]);
+                var longitude = Number(latlonArray[1]);
             }
         }
 
@@ -244,23 +258,7 @@
 
                 let posicao = null;
 
-                console.log(polyline.getPath());
-
-                if (polyline.getPath().Dd) {
-                    posicao = polyline.getPath().Dd;
-                } else if (polyline.getPath().Fd) {
-                    posicao = polyline.getPath().Fd;
-                } else if (polyline.getPath().Gd) {
-                    posicao = polyline.getPath().Gd;
-                } else if (polyline.getPath().Hd) {
-                    posicao = polyline.getPath().Hd;
-                } else if (polyline.getPath().Id) {
-                    posicao = polyline.getPath().Id;
-                } else if (polyline.getPath().Jd) {
-                    posicao = polyline.getPath().Jd;
-                }else {
-                    posicao = polyline.latLngs.Ed[0].Ed;
-                }
+                posicao = polyline.getPath().getArray();
 
                 let total = null;
 

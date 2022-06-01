@@ -29,6 +29,7 @@ module.exports = (app) => {
     .route("/pesquisar-viabilidade")
     .get(isAuth, async (req, res) => {
       res.render("pesquisar-viabilidade/index", {
+        erro: null,
         posicaoCtos: null,
         latlon: "",
         tipo: null,
@@ -53,6 +54,7 @@ module.exports = (app) => {
       let latlon = null;
       let resultadosCtos = null;
       let repostaFrontCtos = [];
+      let erro = [];
       let latlonCortada = null;
       let distanciaInicial = null;
       loginGeosite = process.env.GEOSITE_LOGIN;
@@ -74,7 +76,7 @@ module.exports = (app) => {
             // console.log(resultadoGoogleApi);
           })
           .catch(function (error) {
-            console.log(error);
+            erro.push("Endereço Inválido: " + error.message + " ");
           });
 
         var config = {
@@ -91,7 +93,7 @@ module.exports = (app) => {
             // console.log(resultadoDigicade.token);
           })
           .catch(function (error) {
-            console.log(error);
+            erro.push("Token Inválido: " + error.message + " ");
           });
 
         var config = {
@@ -111,22 +113,23 @@ module.exports = (app) => {
             //console.log(resultadosCtos);
           })
           .catch(function (error) {
-            console.log(error);
+            erro.push("Distância/Token Inválido: " + error.message + " ");
           });
 
-        if (resultadosCtos.success == "false") {
-          //retornar erro
+        if (resultadosCtos) {
+          var caixas = resultadosCtos.caixas;
+        } else {
+          var caixas = null;
         }
 
-        if (resultadosCtos.caixas[0].distancia) {
+        if (caixas != null) {
           distanciaInicial = resultadosCtos.caixas[0].distancia;
         } else {
           distanciaInicial = "";
         }
 
-        console.log(distanciaInicial);
-
         res.render("pesquisar-viabilidade/index", {
+          erro: erro,
           distanciaInicial: distanciaInicial,
           endereco: endereco,
           distancia: distancia,
@@ -135,9 +138,76 @@ module.exports = (app) => {
           mostrar: mostrar,
           tipo: tipo,
           arrayPosicaoCTOS: JSON.stringify(resultadosCtos),
-          finalResultados: resultadosCtos.caixas,
+          finalResultados: caixas,
         });
       } else {
+        let latlonArray = endereco.split(",");
+        let lat = latlonArray[0];
+        let lon = latlonArray[1];
+
+        var config = {
+          method: "post",
+          url: `https://telecom.digicade.com.br/geosite-telecom-api/auth/token?username=${encodeURIComponent(
+            loginGeosite
+          )}&password=${encodeURIComponent(senhaGeosite)}`,
+          headers: {},
+        };
+
+        await axios(config)
+          .then(function (response) {
+            resultadoDigicade = response.data;
+            // console.log(resultadoDigicade.token);
+          })
+          .catch(function (error) {
+            erro.push("Token Inválido: " + error.message + " ");
+          });
+
+        var config = {
+          method: "get",
+          url: `https://telecom.digicade.com.br/geosite-telecom-api/viabilidade/caixas?raio=${encodeURIComponent(
+            distancia
+          )}&latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(
+            lon
+          )}`,
+          headers: {
+            contentType: "application/json",
+            authorization: `Bearer ${resultadoDigicade.token}`,
+          },
+        };
+
+        await axios(config)
+          .then(function (response) {
+            resultadosCtos = response.data;
+            console.log(resultadosCtos);
+          })
+          .catch(function (error) {
+            erro.push("Token/coordenadas Inválidas: " + error.message + " ");
+          });
+
+        if (resultadosCtos) {
+          var caixas = resultadosCtos.caixas;
+        } else {
+          var caixas = null;
+        }
+
+        if (caixas != null) {
+          distanciaInicial = resultadosCtos.caixas[0].distancia;
+        } else {
+          distanciaInicial = "";
+        }
+
+        res.render("pesquisar-viabilidade/index", {
+          erro: erro,
+          distanciaInicial: distanciaInicial,
+          endereco: endereco,
+          distancia: distancia,
+          apiGoogle: process.env.API_GOOGLE_MAPS,
+          latlon: JSON.stringify(endereco),
+          mostrar: mostrar,
+          tipo: tipo,
+          arrayPosicaoCTOS: JSON.stringify(resultadosCtos),
+          finalResultados: caixas,
+        });
       }
     });
 };
