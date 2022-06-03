@@ -9,6 +9,9 @@ class Tabelas {
     this.criarTabelaPermissoes();
     this.criarTabelaUsuarioPermissoes();
     this.criarTabelaViabilidade();
+    this.criarLinkValidacao();
+    this.criarRegistroViabilidade();
+    this.criarRegistroInviabilidade();
   }
 
   criarTabelaConsumoInternet() {
@@ -145,7 +148,9 @@ class Tabelas {
       id int NOT NULL AUTO_INCREMENT,
       numero_cliente varchar(50),      
       lat varchar(100),    
-      lng varchar(100),    
+      lng varchar(100),  
+      data_envio datetime,
+      responsavel varchar(100),    
       PRIMARY KEY(id) 
     )
     `;
@@ -154,6 +159,71 @@ class Tabelas {
         console.log(erro);
       } else {
         console.log("Tabela viabilidade criada com sucesso");
+      }
+    });
+  }
+
+  criarLinkValidacao() {
+    const sql = `
+    CREATE TABLE IF NOT EXISTS link_validacao(
+      id int NOT NULL AUTO_INCREMENT,
+      responsavel varchar(100),
+      data_envio datetime,
+      data_validade datetime,
+      numero_telefone varchar(50),
+      acessado tinyint(1),  
+      PRIMARY KEY(id) 
+    )
+    `;
+    this.conexao.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        console.log("Tabela link_validacao criada com sucesso");
+      }
+    });
+  }
+
+  criarRegistroViabilidade() {
+    const sql = `
+    CREATE TABLE IF NOT EXISTS registro_viabilidade(
+      id int NOT NULL AUTO_INCREMENT,
+      nome varchar(255),
+      lat varchar(100),    
+      lng varchar(100),  
+      viabilidade varchar(100),  
+      resposavel varchar(100),  
+      data_envio datetime,
+      PRIMARY KEY(id) 
+    )
+    `;
+    this.conexao.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        console.log("Tabela registro_viabilidade criada com sucesso");
+      }
+    });
+  }
+
+  criarRegistroInviabilidade() {
+    const sql = `
+    CREATE TABLE IF NOT EXISTS registro_inviabilidade(
+      id int NOT NULL AUTO_INCREMENT,
+      nome varchar(255),
+      lat varchar(100),    
+      lng varchar(100),  
+      viabilidade varchar(100),  
+      resposavel varchar(100),  
+      data_envio datetime,
+      PRIMARY KEY(id) 
+    )
+    `;
+    this.conexao.query(sql, (erro) => {
+      if (erro) {
+        console.log(erro);
+      } else {
+        console.log("Tabela registro_inviabilidade criada com sucesso");
       }
     });
   }

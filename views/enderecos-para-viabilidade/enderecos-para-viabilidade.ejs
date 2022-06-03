@@ -1,0 +1,247 @@
+
+  <script>
+    $(document).ready(function () {
+        
+      var $seuCampoCpf = $("#fone");
+      $seuCampoCpf.mask("00-00000-0000", {
+        reverse: true,
+      });
+    });
+  </script>
+  
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <div class="content-header">
+  
+    </div>
+
+    <div class="content">
+        <div class="content-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-dark">
+                            <h4 class="m-0 ms-3"><strong><i class="fas fa-user"></i></span> Tabela de viabilidades pendentes</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                            <div class="row">
+                        
+                                <div class="col-10">
+                                    <h1>Enviar link para o cliente</h1>
+                                    <p>Se preferir envie o link automaticamente para o cliente ou copie-o e mande pelo WhatsApp, confira abaixo</p>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Enviar Link
+                                    </button>
+                                 
+                                </div>
+                                <div class="col-2">
+                                    <button  class="btn btn-primary"> <i class="fas fa-sync-alt"></i>  Atualizar Página</button>
+                                </div>
+                         
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-primary">
+                            <h3 class="card-title ">Links Aguardando Resposta</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                               
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Responsável</th>
+                                        <th scope="col">Data Envio</th>
+                                        <th scope="col">Data Validade</th>
+                                        <th scope="col">Telefone</th>
+                                        <th scope="col">Link Acessado</th>
+    
+                                    </tr>
+                                 
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i < links.length; i++) {  %> 
+                                    <tr>
+                                        
+                                        <th scope=" row"><%= links[i].id %> </th>
+                                        <td><%= links[i].responsavel %></td>
+                                        <td><%= links[i].data_envio %></td>
+                                        <td><%= links[i].data_validade %></td>
+                                        <td><%= links[i].numero_telefone %></td>
+                                        <td>
+                                            <% if(links[i].acessado == 0){ %>
+                                                nao
+                                            <% }else{ %>
+                                                sim
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                    <div class="card-header bg-primary">
+                        <h3 class="card-title">Localizações Cadastradas</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example3" class="table table-bordered table-hover">
+                            <thead>
+                              
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">CTOs</th>
+                                    <th scope="col">Contato</th>
+                                    <th scope="col">Latitude</th>
+                                    <th scope="col">Longitude</th>
+                                    <th scope="col">Data de Envio</th>
+                                    <th scope="col">Responsável</th>
+                                    <th scope="col text-center">Ações</th>
+                                </tr>
+                              
+                            </thead>
+                            <tbody>
+                                
+                                <% for(var i=0; i < viabilidades.length; i++) {  %> 
+                                <tr>
+                                     
+                                    <th scope="row"><%= viabilidades[i].id %></th>
+                                    <td><a href="">CTOS</a></td>
+                                    <td><%= viabilidades[i].numero_cliente %></td>
+                                    <td><%= viabilidades[i].lat %></td>
+                                    <td><%= viabilidades[i].lng %></td>
+                                    <td><%= viabilidades[i].data_envio %></td>
+                                    <td><%= viabilidades[i].responsavel %></td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <form method="post" onsubmit="">
+                                                
+                                                <input type="text" value="{{$finalResultado->id}}" hidden=" hidden" name="id">
+                                                <input type="text" value="viabilidade" hidden=" hidden" name="tipo">
+                                                <button class="btn btn-primary btn-sm" type="submit">
+                                                    <i class="fas fa-check"></i> Viabilidade
+                                                </button>
+                                            </form>
+
+                                            <form method="post" class="ml-3" onsubmit="">
+                                                
+                                                <input type="text" value="{{$finalResultado->id}}" hidden="hidden" name="id">
+                                                <input type="text" value="inviabilidade" hidden=" hidden" name="tipo">
+                                                <button class="btn btn-danger btn-sm" type="submit">
+                                                    <i class="fas fa-times"></i> Inviabilidade
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Solicitar Localização do Cliente (Mensagem)</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="post">
+        <div class="modal-body">
+
+            <div class="">
+                <p class="p-2">Insira o número do cliente (com código de área) no campo abaixo e clique em "enviar mensagem" para que o cliente receba o link de acesso no WhatsApp com o número da empresa.</p>
+                <p class="p-2">Lembre-se de inserir a validade do link, ele será o tempo disponível para o cliente enviar sua posição.</p>
+            </div>
+            <div class="">
+                <div class="input mb-3">
+                    <div class="input-prepend">
+                      <span class="input-text" id="basic-addon1">DDI</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Ex: 55" value="55" aria-label="Username" aria-describedby="basic-addon1" name="ddi" required>
+                </div>
+                <div class="input mb-3">
+                    <div class="input-prepend">
+                      <span class="input-text" id="basic-addon1">Número de telefone</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Ex: 99-99999-9999" aria-label="Username" aria-describedby="basic-addon1" id="fone" name="fone" required>
+                </div>
+                <div class="input mb-3">
+                    <div class="input-prepend">
+                      <span class="input-text" id="basic-addon1">Validade Link</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <select class="form-control" id="inputGroupSelect01" name="periodoValidade" required>
+                                <option value="days" selected>Dia(s)</option>
+                                <option value="hours">Hora(s)</option>
+                                <option value="minutes" selected>Minuto(s)</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <input type="number" class="form-control" name="quantidade" placeholder="Quantidade" aria-describedby="basic-addon1" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Enviar Link</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<script src="assets/config/config.js"></script>
+<script src="assets/controllers/CadastroViabilidadeCliente.js"></script>
+<script src=""></script>
+<script>
+    let cadastroViabilidadeCliente = new CadastroViabilidadeCliente();
+</script>
+
+
+
+
